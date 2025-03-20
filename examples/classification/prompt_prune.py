@@ -78,7 +78,7 @@ def main(args):
         if args.pruner == "TAPruning":
             args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples"
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
             f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
@@ -88,7 +88,7 @@ def main(args):
         if args.pruner == "TAPruning":
             args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples"
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
             f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
@@ -114,6 +114,7 @@ if __name__ == "__main__":
                                   "yelp-5-random", "yahoo-random", "piqa-random"], help='Dataset description')
     parser.add_argument('--pruner', type=str, default= "TAPruning", options = ["TAPruning", "PromptQuine"], help='Pruning algorithm used.')
     parser.add_argument('--fix_prune_order', type=bool, default=True, help='Indicator: whether to fix the pruning order (e.g., TAPruning)')
+    parser.add_argument('--TAPruning_threshold', type=float, default=0.96, help='Threshold for TAPruning')
     parser.add_argument('--prune_order_seed', type=int, default=0, help='If not fixing the order, provide the seed (applicable to TAPruning Only)')
     parser.add_argument('--ICL_shots', type=int, default= 1, help='Scaling the shots for ICL, tycically setting to 1')
     parser.add_argument('--ICL_index', type=int, default= 0, help='Index of the ICL prompt')
