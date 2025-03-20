@@ -1,0 +1,97 @@
+premise	hypothesis	label
+A panel of men and women attending a conference.	people attend conference	0
+A man is in the kitchen cutting up chicken and vegetables on the counter, preparing a meal.	A man preps food.	0
+A short-haired male singer wearing a brown buttoned shirt plays the violin and sings on a stage, which is illuminated with a hot pink and blue display.	The singer knows how to play the violin	0
+A redhead wearing a red shirt climbs on tree branches.	The redhead is on a tree.	0
+Two people are sitting close together on a bus with a scratched window.	The bus has a scratched window.	0
+A man and his canine on the beach.	A dog is near the man.	0
+A man reading a newspaper outside next to some trashcans.	The man is literate.	0
+3 Asian tourists are looking out at the city while one of them takes a picture.	A tourist takes a picture of their companions.	0
+A man sitting outside, fanning his face with something.	A man is outdoors, fanning his face.	0
+A man wearing sunglasses, a blue sweatshirt and carrying a backpack walks across a busy crosswalk as cars in the background wait at a red light.	A man walks across a crosswalk.	0
+Three women speak to each other in a room with tan walls.	Three women are talking.	0
+A large group of protesters staring up at the stage together.	A group of protesters watching someone on stage.	0
+A boy stands in water near a Frisbee.	The boy's feet are wet.	0
+A woman who just gave birth holding her baby in the hospital.	a lady holds her baby after labor	0
+Several people jogging outside on a sunny day in what seems to be a neighborhood, could be part of a marathon.	Possible marathon runners are jogging outside on a sunny day through a neighborhood.	0
+A child wearing blue shorts, white shirt, soccer socks and shin guards, holds a pink ball over her head as she gets ready to throw it.	There is a child in the football ground.	0
+Two men wearing safety harnesses are working on a light fixture.	The men are working on a fixture.	0
+A man in a blue-green shirt walking by a building with a poster of a woman in a black dress.	a man in blue	0
+A man with a guitar playing to an ill little girl in a hospital bed.	A man plays a song for a sick child.	0
+A large crowd of people are sitting outside of a store.	A large group is gathered outside of a store.	0
+A pair of hands taking apart a clock.	Someone is disassembling a clock.	0
+A bike riding couple dressed in bike gear and helmets take a minute to site on a bench to talk and park their bikes.	A bike riding couple dressed in bike gear and helmets relaxing on a bench.	0
+A woman instructs several people in how to do a craft.	A woman is instructing people.	0
+Workers in green and white vest and hard hats waiting to go to work.	Hard hatted, green and white vest wearing workers wait together to go to work.	0
+A man sits on a stool reading the newspaper among a bunch of debris.	The man on the stool read the newspaper.	0
+The lady is taking notes.	Girl writing	0
+Three men loading items on a sled.	Men load a sled.	0
+A group of individuals are running a race.	People running.	0
+A man standing in a lake fishing.	A man is fishing.	0
+A little boy in an oversized cap is eating a Popsicle.	Boy eats frozen treat.	0
+A man in a black suit and a woman wearing a white dress and holding flowers getting married	There is a minister standing between the man and woman.	0
+A man in a river fishing.	There is a person fishing.	0
+Two little blond boys play on a bed in a room with wood paneling.	The friends play together.	1
+A young woman is sledding down a snowy hill.	It is winter.	1
+A black dog jumping off a riverbank near a wooded area.	A puppy jumping near a wooded area.	1
+A snowboarder glides through the air.	A snowboarder just went off a ramp to do a trick in the air.	1
+Explorer inside a snow cave standing on clear blue ice.	The explorer is on a glacier.	1
+Two men playing rugby on the ground.	The two people are teammates.	1
+An surfer airborne over a wave.	A surfer in California riding the waves	1
+A person wearing a red and black uniform is holding a bat and wearing a red batter's helmet while a girl sits behind in the same uniform.	A person trying to impress a girl in the same uniform.	1
+Lots of people are walking on the road near several white buildings towards Nationals Park.	People going to game at Nationals Park	1
+Two shirtless men practicing Capoeira on a beach with water in the background.	two shirtless men practice capoeira at the beach for a crowd	1
+People march in costumes with makeup on their faces.	The people enjoy getting dressed up.	1
+A woman in a casino stands at an ATM to withdraw money.	A woman lost her money in casino games and is withdrawing more.	1
+An asian man with a teal apron is using a knife to prepare food in a kitchen.	The man is making sushi.	1
+Two men in black running in a race.	Two men are running past other runners.	1
+Person in orange shirt balancing bicycle on wire	A person practicing a circus balancing act.	1
+A man with a red bag rides his bike down a damp city street in front of a building covered in scaffolding.	A man is downtown.	1
+A woman with a white shirt and ponytail walks by.	A woman walks by the stores.	1
+A male rock climber is scaling a wall while another man belays him.	The two men are best friends.	1
+A man touching a giant BlackBerry.	A man is demonstrating how an object operates.	1
+Two boys, one wearing a blue shirt, the other wearing a muscle shirt, facing each other on a brick wall, next to a culvert.	The boys are looking for bugs.	1
+A man riding an orange and white motorcycle.	A man is driving a bike to work.	1
+Two small children, one boy and one girl, standing near a street vendor talking.	The children are talking about robbing the street vendor.	1
+A man is strutting across the street while smoking a cigarette.	The man is taking a smoke break during his lunch break.	1
+A little boy in a red shirt is swinging at a pinata.	A young boy is at a birthday party.	1
+Five men in a rock concert playing different instruments.	There are five men in a heavy metal concert.	1
+There are two men in a graveyard and one of the men has a wheelbarrow and a shovel and he is digging a grave.	A man digs a grave for a relative.	1
+Many bundled up people are standing in a public square.	A crowd of people are bundled up standing in the public square while having lunch.	1
+A mural is being painted on a wall.	the mural is almost done on the wall	1
+A kid in a broncos football team jersey and hat is standing at a tailgating party.	The kid is a broncos fan.	1
+A person is riding a bike along a street in a desolate city setting.	The person is female.	1
+Children in boats in the water.	The children are using paddle boats on the water.	1
+A poor family in India walk down a cobblestone street past a crumbling house.	A poor family is wearing bad clothes	1
+A man riding a bicycle performs a trick above a dirt mound.	The man is walking on a dirt mound.	2
+Two people are riding bikes beside train tracks.	Two people ride their bikes along the beach	2
+Two dogs, one brown and one black, playing with each other.	Two dogs are running after a robotic rabbit in a tutu.	2
+Two men in blue uniforms and green workman vest.	Two men in swimsuits.	2
+boys in a marketplace in india.	Boys are fighting.	2
+Two young men in black punk rock clothing are sitting on the floor at a playground.	two men are jamming on stage with their band	2
+two asian girls laughing together	The girls are sleeping	2
+Four construction workers gathered around a hole looking in a bucket.	The construction worker is sitting down a nice restaurant for his anniversary	2
+Two boys happily pull cart.	One boy pulling a cart	2
+The man in blue is walking on the red bridge.	A man in blue running across a red bridge.	2
+a man is kissing a woman.	Two women are kissing	2
+A bunch of kids waiting for the school bus.	A bunch of kids are crying.	2
+Many onlookers look upon some firefighters behind caution tape, along with a man in a suit on a cellphone.	Firefighters are sleeping in their homes.	2
+Four hikers are climbing stone steps in a forest area.	Four people are about to bungee jump off a bridge.	2
+Two people are standing near their motorcycles.	Two people are sitting.	2
+Crowd watching a person in scary costume holding a torch.	A group is watching a someone do a tumbling act.	2
+Two dogs wearing sweaters play in a field.	the dogs are knitting sweaters	2
+The firefighters are doing a serious task.	The police men are driving the car.	2
+The people are riding a gondola down the calm river.	the people are in a sailboat.	2
+Children watching a man make large bubbles.	Children are taking a bubble bath.	2
+A band playing in a pretty small venue.	Songs, don'ts singing cats	2
+Several young people are standing in a circle smiling.	Several young people are sitting.	2
+Two horses greet a man in red pants and a black shirt, while a dog on a leash attempts to jump the fence.	A man has fallen asleep in his armchair.	2
+An old couple walks along a street that lacks color.	An older couple is eating lunch	2
+A person in baggy pants and brown hoodie, with a backpack, walks on a sidewalk with signs in Chinese.	A person has baggy shorts.	2
+Two men are playing chess.	Two men are playing cards.	2
+man playing a fiddle on stage with other band members.	A man is cutting the pizza.	2
+Women dressed in pink and white clothing stand with arms pointed to the sky.	A women is sleeping.	2
+a young girl in pink top, young girl wearing a blue sweater and another girl wearing a yellow top.	Two boys in shirts with one wearing a sweater are together.	2
+Two women wearing red are standing.	Two men are walking.	2
+A man and woman are standing near a wall in the winter.	Nobody near a wall.	2
+A group of students who play the saxophone are preparing for a concert.	The students were at a rally.	2

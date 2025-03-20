@@ -1,0 +1,97 @@
+premise	hypothesis	label
+A man in a blue kayak paddles in water.	A man kayaks in a body of water.	0
+the reflection of a young couple in a train window with onlookers and a old asian man sitting on the bench.	people are on a train.	0
+A dark-haired woman wearing a red skirt and white top uses a pay phone.	A woman uses a pay phone	0
+Protesters are in the background of this photo whereas a magazine display is in the foreground.	A group of people protesting.	0
+The people on the street need to be wearing sunscreen.	The crowd on the road should be using sun-block lotion.	0
+A black man in a white tank top approaches a couple in the street who are eating green and blue snow cones.	The people eating snow cones are outside.	0
+A white dog runs in the grass.	An animal is running outside.	0
+A large crowd of people are running in a city marathon.	The people are running outside in a race.	0
+a black dog jumping to catch a rope toy	The dog is playing.	0
+person in black looking at a man standing behind a motorcycle.	A man has a motorcycle.	0
+A man hugging a boy in a tunnel, made in the trunk of a tree.	The tree has a carving in it.	0
+A man in a white shirt advertising a summer school is talking to a man in a pink shirt in front of a crowd.	The man is attempting to sell a service.	0
+A woman in green shoes, walking and holding a phone.	There is a woman in green holding a phone.	0
+A group of Indian men demonstrate the act of sleeping to 3 school children, a young boy, and two young girls.	A human sleeping	0
+A baseball player is caught midair attempting to catch the baseball with his mitt, while another player looks on.	The person is jumping for the ball.	0
+An asian boy eating a piece of cake.	The boy is chewing on the piece of cake	0
+A woman is cooking food in a kitchen.	A woman in the kitchen.	0
+A young girl is standing on the back of a man's bicycle while the man peddles forward.	A girl stands on the back of a bicycle.	0
+Camels are being led by a man in the desert.	There are animals in the desert.	0
+"A man with a mohawk is carrying food while wearing a t-shirt that says ""bread-butter-cheese-victory""."	A man with a mohawk is holding food.	0
+A woman dressed in black is staring at the floor on a sunny day.	A woman is looking downward.	0
+A dark-skinned security officer smiles.	A man is smiling.	0
+An immigrant stands outside of a Laundromat in the city.	An immigrant stands outdoors.	0
+A man with a number 12 on his chest is mid-stride while running a race.	A person is running	0
+An overweight man sits outside a bistro, smoking a cigarette.	A man that has a BMI that is higher than 25 is smoking.	0
+Football players in white, red, and black uniforms run down the field by the 30 yard line.	The team of football players are currently in motion.	0
+Men are cutting a large opening through the ice on a frozen lake.	Men cutting through ice on a frozen lake.	0
+A shirtless male is riding a skateboard, performing a trick.	The man is on top of the skateboard	0
+A man and a woman are sleeping while sitting in a bus or train of some kind.	Two people in a mechanical device.	0
+People stand outside of a market.	People are near a market.	0
+This boy, wearing a red shirt and blue shorts, is running.	The boy is running.	0
+A football player in a gold helmet is running with a football.	A golden helmed football player runs with the ball.	0
+A man playing the guitar for a small group of people.	The man is playing an acoustic guitar.	1
+A man is bowling using empty spray cans as pins in front of a wall covered in graffiti.	The man was a former champion.	1
+Three elderly women, two with canes, walk through a parking lot.	the women are black	1
+A dog takes a leap of faith as he jumps into a pool to grab an orange toy.	The dog is inside about to jump in a pool.	1
+Several people are in a group where a man in a blue shirt is smiling.	The man is having a pleasant talk with his friends.	1
+Two people, one wearing white hat with green shirt, the other red shirt and red cap, in a boat, staring at the shore.	A tall human staring	1
+A group of children and two adults are sitting on a bench.	People are outside on a bench waiting to get in a restuarant.	1
+A man with a plaid shirt riding a bike going down a brick road with blue fence segments in the distance.	The man is wearing brown shoes.	1
+A group of women, dressed in festive blue dresses and feather head decors, parade down the street.	People perform in a Parade as it marches down the street.	1
+A toddler is washing a window with cleaning spray and paper towels.	The toddler is trying to help his mother.	1
+A woman in a blue shirt with a blue bag passes by a large yard sale with colorful clothes, adults and children within.	A woman is doing some shopping.	1
+A boy, midair, after jumping off of a small dirt hill.	The boy is wearing sneakers.	1
+A boy jumping in a fountain.	A boy is in the fountain	1
+Many people in an urban setting waving flags and setting off smoke bombs.	People riot and protest after an election	1
+A little girl is ecstatic after opening a present at her birthday party.	A little girl loves her present.	1
+Dad holding little girls hand while walking.	Dad is holding his daughter's hand as he walks her into the surgery room.	1
+A woman is using a machine and is smiling.	A tall human smiling	1
+A little girl, with long blond-hair and wearing a dress, looking at her refection in a puddle.	The blonde haired girl is wearing a dress that has sunflowers on it, while staring at a puddle.	1
+People are gathered outside for a protest, and one woman in the front is smiling at the camera.	Cops might have to beat some people up.	1
+A young toddler is playing with a dinosaur toy and a yellow block while sitting in the bathtub.	A toddler is taking a bath.	1
+A man gives a speech at a Pop! Tech event.	A man pitches a new idea.	1
+Two Asian women are sitting at a table enjoying their foods.	Two Asian women are sitting at a table enjoying their foods in the chinese restaurant.	1
+A crowd of people, some standing by a river, some in the river with old buildings in the background.	a pack of friends meet up in a river	1
+A young man in a black sweater plays a trumpet into a microphone.	A person is playing an instrument into a recording device.	1
+A man eating something with a spoon.	A man is eating ice cream.	1
+A woman in a white shirt and blue shorts is wearing headphones.	A woman in a white shirt listens to music.	1
+Seven children are jumping in a grassy meadow.	Seven children are in the rain.	1
+A crowd of people come out of an old building	a bunch of people come outside from class	1
+A class of art students drawing.	They are drawing bears.	1
+The boy in the white and red shirt is holding a phone.	A boy calls his dad on the phone.	1
+Children are walking along a dirt path.	Children are walking a path on a huge mountain.	1
+Two young girls wearing goth clothes.	Two young girls wearing all black	1
+A dark-haired woman in a black coat and blue jeans sitting on white stone bench outdoors	The man was sitting outdoors.	2
+An older person, sex indeterminate, visits with two spotted rabbits in a large cage.	The person is young.	2
+A man smiles as he sits in a cubicle and types on a computer.	A woman writes a love letter in her notebook	2
+Two elderly men are discussing something out on a the sidewalk.	The elderly men are laying in hospital beds.	2
+An old gray-haired man demonstrates a vegetable peeler on a carrot.	A young woman is cleaning the house.	2
+Four people with black hair pose for a picture with windows in the background.	Four people are having a physical altercation.	2
+A man tying his shoe at a beach.	The man is sleeping.	2
+A woman with a spunky hairdo painting a building.	The woman is wearing a big floppy hat and laying on a towel at the beach.	2
+The men are fishing at a highly littered river.	Some men are sailing on a clear lake.	2
+A young man is sitting at a table playing BINGO with an older lady.	A young man is slapping his grandmother.	2
+Man and woman looking out a window from behind a green curtain.	A man and woman sleeping in front of a window.	2
+A beautiful brown and white St Bernard running in the snow	A white St. Bernard rests by the fire.	2
+Children gathered around an adult	The children are alone with no adults.	2
+Woman bending down to pick up a tennis ball outside in front of a wall with graffiti on it.	Two tennis players carry their rackets.	2
+Two children are making snow angels.	The kids are throwing snowballs at passing cars.	2
+Firefighters wear reflective uniforms and stare upwards.	Firefighters wear reflective uniforms and run out of a building.	2
+Child wearing fireman's hat sits on ground next to man holding a handsaw.	Two people are sitting on the ground.	2
+A man surfing on a surfboard in the sea with waves behind him.	A man snowboards down a mountain.	2
+A dog rests on a mattress while a old woman sits on the floor.	A dog and woman are taking a walk.	2
+An orange and white motorcycle is being ridden on a racetrack.	the bike is flat black	2
+A black and tan dog plays with a stuffed toy.	A dog is sleeping.	2
+a young child is climbing a rock wall in all his protective gear.	man swims	2
+A woman wearing a yellow flowered top is carrying a Starbucks coffee cup.	A woman holding a beer bottle.	2
+Two field hockey players with their sticks in the air	A hockey player shoots the puck and scores a goal.	2
+A man and a woman share a kiss on the beach.	An empty beach.	2
+People looking at clothes and other items at an outside market.	People are shopping at an indoor mall.	2
+A woman wearing a white shirt and red pants is writing something down at a museum.	A woman does nothing.	2
+A clown standing in front of a crowd along a street.	the clown got hit by a car	2
+A man with a pink camera taking a picture of a rock concert.	A man screams with excitement at a Justin Beiber concert.	2
+A young male playing an electric bass guitar.	a young female plays the drums	2
+People on two balconies and a man climbing up a pipe towards the lower balcony getting liquid poured on him.	A man is walking by a building.	2
+A couple walking down a beach in the surf carrying their sandals.	A couple swimming in the sea.	2

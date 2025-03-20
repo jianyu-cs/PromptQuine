@@ -1,0 +1,25 @@
+premise	hypothesis	label
+A man in a red shirt is holding a little boy in a blue shirt	A man is holding a little boy.	0
+Light colored dog running with a ball in its mouth.	A dog is playing with a ball.	0
+A man preparing a camera on a tripod	A human preparing.	0
+A baseball batter awaits a pitch.	There is a baseball batter.	0
+A female in a green shirt standing while traffic passes.	a girl waits by passing cars	0
+Two girls and two guys walking down the street.	People walking down the street.	0
+A woman sits on a bed with a stuffed camel in her lap while putting her hands over her face.	A woman sits on a bed with a stuffed animal.	0
+The lake looks very shallow.	The edge of the lake is low.	0
+A boy in a black jacket and tan hat is running down a sidewalk.	A child is running because he is late for school.	1
+A man attaches bicycles to the back of his car in a tree lined parking lot.	A man puts his red bicycle onto the back of his truck.	1
+A band plays in front of a crowd at a Euro Jazz concert.	The people in the crowd liked the band.	1
+A woman is walking along the beach with three children following behind her.	She is their mother.	1
+A young child carries a large bag over his head.	The kid is using the bag as a mask because he is ashamed.	1
+A girl wearing a green shirt rides her bicycle in front of an apartment building.	A girl is biking to school from her apartment.	1
+A soccer player with no shirt standing in the middle of the field.	The boy is on the skins team in gym class.	1
+A group of people standing on a hillside decorated with yellow flowers as fog rolls over a nearby mountainside.	The people are hoping it doesn't rain.	1
+A girl in red jumps across a path.	The girl is dressed in blue.	2
+A rollerblader is skating against the flow of many other rollerbladers.	A rollerblader is moving with the crowd.	2
+Two young men are sitting at a table with dominoes and a woman in black who is talking while they are smiling at the camera.	two men are starting a fight with each other	2
+A young girl sits in the grass, admiring a tiny plant.	a girl runs around in the grass	2
+A group of woman are dancing while the other woman are watching and clapping.	Men are standing around a bus station.	2
+A child in colorful goggles plays in a pool.	A child with no goggles plays in a pool.	2
+A group of friends enjoy desert.	A group of friends are at a movie.	2
+Cyclists await the start of a race.	The cyclists are all sitting in canoes.	2
