@@ -12,7 +12,7 @@ from fsc_evaluator import PromptedClassificationEvaluator
 sys.path.append("../../")
 from modules.TAPruner import TAPruner
 from modules.PromptQuinePruner import PromptQuinePruner
-from dataset_helper import make_balanced_classification_dataset, get_dataset_verbalizers
+from dataset_helper import make_balanced_classification_dataset
 
 def main(args):
     base_path = "./data"
@@ -37,8 +37,6 @@ def main(args):
                              shuffle=False,
                              batch_size=512,
                              drop_last=False)
-    verbalizers = get_dataset_verbalizers(args.dataset, args.model)
-    num_classes = len(verbalizers)
     
     # 1. Load ICL Prompts for Pruning
     if "random" in dataset_description:
@@ -72,14 +70,32 @@ def main(args):
     prompt_collection_df = pd.DataFrame(prompt_queues, columns=['prompt', 'acc', 'reward', '#tokens', "mask"])
     prompt_collection_df = prompt_collection_df.drop(columns=["mask"])
     
-    
+    model_name = ags.model.split("/")[1] if "/" in args.model else args.model
+    if not os.path.exists(f"./PrunedPrompts_by_{args.pruner}/"):
+        os.mkdir(f"./PrunedPrompts_by_{args.pruner}/")
         
-    
-    
+    if args.fix_prune_order:
+        if args.pruner == "TAPruning":
+            args.num_shots = 200
+            prompt_collection_df.to_csv(
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples"
+            f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+        elif args.pruner == "PromptQuine":
+            prompt_collection_df.to_csv(
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-shots"
+            f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+    else:
+        if args.pruner == "TAPruning":
+            args.num_shots = 200
+            prompt_collection_df.to_csv(
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples"
+            f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+        elif args.pruner == "PromptQuine":
+            prompt_collection_df.to_csv(
+            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-shots"
+            f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
 
-    
-    
-
+            
 if __name__ == "__main__":
     starttime = datetime.datetime.now()
     
@@ -98,6 +114,7 @@ if __name__ == "__main__":
                                   "yelp-5-random", "yahoo-random", "piqa-random"], help='Dataset description')
     parser.add_argument('--pruner', type=str, default= "TAPruning", options = ["TAPruning", "PromptQuine"], help='Pruning algorithm used.')
     parser.add_argument('--fix_prune_order', type=bool, default=True, help='Indicator: whether to fix the pruning order (e.g., TAPruning)')
+    parser.add_argument('--prune_order_seed', type=int, default=0, help='If not fixing the order, provide the seed (applicable to TAPruning Only)')
     parser.add_argument('--ICL_shots', type=int, default= 1, help='Scaling the shots for ICL, tycically setting to 1')
     parser.add_argument('--ICL_index', type=int, default= 0, help='Index of the ICL prompt')
     
