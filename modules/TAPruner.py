@@ -10,17 +10,15 @@ import time
 import datetime
 import pandas as pd
 import random
-from Pruner import Pruner
+from .Pruner import Pruner
 from itertools import compress
 from omegaconf import OmegaConf
 
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, LlamaTokenizer
-from typing import Optional, Union, List, Dict, Any
+from typing import Optional, Union, List, Dict, Any, Tuple
 from utils.task_wrappers import colorful_print, create_tabulist, PromptedTaskWrapperBase
 # TODO
-from fsc_helpers import (make_reduced_classification_dataset,
-                         get_dataset_verbalizers)
 from examples.classification.fsc_evaluator import PromptedClassificationEvaluator
 
 
@@ -28,8 +26,8 @@ class TAPruner(Pruner):
     """The TAPruner class for TAPruning implementations."""
     
     def __init__(self, 
-                 prompt_evaluator: Optional[PromptedClassificationEvaluator, 
-                             PromptedStyleTransferEvaluator, PromptedMathReasoningEvaluator],
+                 prompt_evaluator: Optional[PromptedClassificationEvaluator], 
+                             #PromptedStyleTransferEvaluator, PromptedMathReasoningEvaluator],
                  task_lm: str,
                  evaluator_task: str,
                  prompt: Optional[str] = None,
@@ -49,7 +47,7 @@ class TAPruner(Pruner):
         self.task_lm = task_lm
         self.threshold = threshold # 1 => greedy
     
-    def forward(prompt: str, test_loader: Any, 
+    def forward(self, prompt: str, test_loader: Any, 
                 reward_driven: bool = False,
                 fix_prune_order: bool = True) -> List[Tuple]:
         """Conduct TAPruning on the specified prompts"""
@@ -89,10 +87,10 @@ class TAPruner(Pruner):
             counter = 0 
             while counter < admissable_len:
                 colorful_print(f"Count: {counter}, Token: {prompt_tokens[IND2POS[counter]]}", fg='green')
-                colorful_print(f"Prompt: {temp_prompt}", fg='red')
                 # leave-one-token-out
                 mask[IND2POS[counter]] = False
                 temp_prompt = tokenizer.decode(list(compress(prompt_ids, mask)))
+                colorful_print(f"Prompt: {temp_prompt}", fg='red')
                 acc, reward = self.tester.forward(test_loader, temp_prompt)
                 performance = acc if not reward_driven else reward
                 num_iterations += 1

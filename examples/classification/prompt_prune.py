@@ -1,8 +1,10 @@
 import sys
 import os
+import json
 import copy
 import datetime
 import argparse
+import pandas as pd
 from itertools import compress
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, LlamaTokenizer
@@ -12,7 +14,8 @@ from fsc_evaluator import PromptedClassificationEvaluator
 sys.path.append("../../")
 from modules.TAPruner import TAPruner
 from modules.PromptQuinePruner import PromptQuinePruner
-from dataset_helper import make_balanced_classification_dataset
+from dataset_helper import make_balanced_classification_dataset, make_classification_dataset
+
 
 def main(args):
     base_path = "./data"
@@ -43,9 +46,9 @@ def main(args):
         # Random Verbalizers (e.g., counter-intuitive)
         prompts_path = f"../../prompts/classification_prompts/{args.dataset}/randomlabelwords_few_shot_natural_prompts.jsonl"
     else:
-        prompts_path = f"../../prompts/classification_prompts/{config.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot.jsonl" \
+        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot.jsonl" \
             if args.is_mask_lm == False else \
-                f"../../prompts/classification_prompts/{config.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot_masked.jsonl"
+                f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot_masked.jsonl"
     
     prompt_dict_list = [] 
     with open(prompts_path, 'r') as prompt_jsons:
@@ -67,10 +70,11 @@ def main(args):
     prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=args.reward_driven,
                 fix_prune_order=args.fix_prune_order)
     # 4. Save the collection of prompts
+    prompt_queues = [(p, acc.item(), r.item(), l, m) for p, acc, r, l, m in prompt_queues]
     prompt_collection_df = pd.DataFrame(prompt_queues, columns=['prompt', 'acc', 'reward', '#tokens', "mask"])
     prompt_collection_df = prompt_collection_df.drop(columns=["mask"])
     
-    model_name = ags.model.split("/")[1] if "/" in args.model else args.model
+    model_name = args.model.split("/")[1] if "/" in args.model else args.model
     if not os.path.exists(f"./PrunedPrompts_by_{args.pruner}/"):
         os.mkdir(f"./PrunedPrompts_by_{args.pruner}/")
         
@@ -78,21 +82,21 @@ def main(args):
         if args.pruner == "TAPruning":
             args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
             f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-shots"
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-shots"
             f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
     else:
         if args.pruner == "TAPruning":
             args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
             f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{args.model}_{args.dataset}_{args.num_shots}-shots"
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-shots"
             f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
 
             
@@ -109,10 +113,10 @@ if __name__ == "__main__":
     parser.add_argument('--dataset_split', type=bool, default=True, help='Dataset split indicator (half)')
     parser.add_argument('--dataset_split_seed', type=int, default=0, help='Dataset split seed (half)')
     parser.add_argument('--dataset', type=str, default= "sst-2", 
-                        options = ["sst-2", "subj", "agnews", "snli", "yelp-5", "yahoo", "piqa",
+                        choices = ["sst-2", "subj", "agnews", "snli", "yelp-5", "yahoo", "piqa",
                                   "sst-2-random", "subj-random", "agnews-random", "snli-random",
                                   "yelp-5-random", "yahoo-random", "piqa-random"], help='Dataset description')
-    parser.add_argument('--pruner', type=str, default= "TAPruning", options = ["TAPruning", "PromptQuine"], help='Pruning algorithm used.')
+    parser.add_argument('--pruner', type=str, default= "TAPruning", choices = ["TAPruning", "PromptQuine"], help='Pruning algorithm used.')
     parser.add_argument('--fix_prune_order', type=bool, default=True, help='Indicator: whether to fix the pruning order (e.g., TAPruning)')
     parser.add_argument('--TAPruning_threshold', type=float, default=0.96, help='Threshold for TAPruning')
     parser.add_argument('--prune_order_seed', type=int, default=0, help='If not fixing the order, provide the seed (applicable to TAPruning Only)')

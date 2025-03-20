@@ -12,7 +12,7 @@ from transformers import (AutoTokenizer,
                           AutoModelForMaskedLM)
 from vllm import LLM, SamplingParams
 
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Any
 
 
 def load_verbalizers(task_lm: str, dataset: str) -> List[str]:
@@ -76,7 +76,7 @@ class PromptedClassificationEvaluator:
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
                                    else "cpu")
-        self.mode = mode
+        self.mode = mode if not is_mask_lm else "HF"
         self.dataset = dataset
         self.task_lm = task_lm
         print("Task LM:", self.task_lm)
@@ -105,7 +105,7 @@ class PromptedClassificationEvaluator:
         self.verbalizers = self._tokenizer.encode(load_verbalizers(self.task_lm, dataset))
 
         self.verbalizer_ids = [self._tokenizer.convert_tokens_to_ids(v)
-                               for v in self.verbalizers]
+                               for v in load_verbalizers(self.task_lm, dataset)]
         if prompt is None:
             self.template = self.load_default_template()  # prompt templates
         else:

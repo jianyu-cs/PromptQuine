@@ -89,10 +89,10 @@ def make_classification_dataset(
                             dataset_seed, mode, 
                             base_path, 16,
                             task_lm)
-    if config.dataset not in ["snli", 'piqa']:
+    if dataset not in ["snli", 'piqa']:
         fsc_dataset = PromptedClassificationDataset(source_texts, 
                                                 class_labels)
-    elif config.dataset == 'snli':
+    elif dataset == 'snli':
         source_texts = [[x, y] for x, y in zip(source_texts[0], source_texts[1])]
         fsc_dataset = PromptedClassificationDataset(source_texts,
                                                 class_labels)
@@ -145,7 +145,7 @@ def load_few_shot_classification_dataset(
         
     class_labels = df.label.tolist()
 
-    verbalizers = get_dataset_verbalizers(dataset, task_lm)
+    verbalizers = get_dataset_verbalizers(dataset)
     num_classes = len(verbalizers)
 
     template = None

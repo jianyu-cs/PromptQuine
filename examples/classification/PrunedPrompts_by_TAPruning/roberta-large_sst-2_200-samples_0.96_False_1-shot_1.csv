@@ -1,0 +1,317 @@
+,prompt,acc,reward,#tokens
+0,"Review: fairly successful at faking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8700000047683716,115.70728302001953,76
+1,"Review fairly successful at faking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8700000047683716,103.56224060058594,75
+2,"Review successful at faking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8799999952316284,109.89786529541016,74
+3,"Review at faking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9049999713897705,111.87357330322266,73
+4,"Review faking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8849999904632568,111.09933471679688,72
+5,"Reviewaking some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8799999952316284,103.31019592285156,71
+6,"Review some pretty cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8949999809265137,107.05667114257812,70
+7,"Review some cool stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.875,105.86866760253906,69
+8,"Review some stunts but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8899999856948853,107.7669906616211,68
+9,"Review some but a complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9099999666213989,105.48595428466797,67
+10,"Review some but complete failure at trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8799999952316284,100.71220397949219,66
+11,"Review some but complete failure trying to create some pretty cool characters .
+Sentiment: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.875,100.22325134277344,65
+12,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terrible
+
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8849999904632568,101.87063598632812,64
+13,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terrible
+Review: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9149999618530273,111.19937133789062,63
+14,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: achieves a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8999999761581421,111.23965454101562,62
+15,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: a sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8799999952316284,103.4505844116211,61
+16,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: sort of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8949999809265137,103.43035125732422,60
+17,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of filmic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9199999570846558,108.80644226074219,59
+18,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: ofic epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8949999809265137,106.91373443603516,58
+19,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of epiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.8999999761581421,100.4867935180664,57
+20,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: ofiphany that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9300000071525574,114.81526947021484,56
+21,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of that revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9350000023841858,114.3556137084961,55
+22,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of revels in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9300000071525574,109.14715576171875,54
+23,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: ofs in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9350000023841858,101.01052856445312,53
+24,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of in the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9300000071525574,100.04552459716797,52
+25,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of the true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9099999666213989,92.78972625732422,51
+26,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of true potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9199999570846558,96.40532684326172,50
+27,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of potential of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9199999570846558,93.50005340576172,49
+28,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9350000023841858,92.42296600341797,48
+29,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of the medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9249999523162842,86.8068618774414,47
+30,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of medium .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9199999570846558,89.34650421142578,46
+31,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of .
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9199999570846558,76.78535461425781,45
+32,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sentiment: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9149999618530273,80.46926879882812,44
+33,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9149999618530273,75.13777923583984,43
+34,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}
+Sentiment: {mask_token}",0.9099999666213989,78.19960021972656,42
+35,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sentiment: {mask_token}",0.9350000023841858,100.05131530761719,41
+36,"Review some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.8999999761581421,83.89289093017578,40
+37," some but complete failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9199999570846558,69.7436294555664,39
+38," some but failure trying to create some pretty cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.8999999761581421,72.18875122070312,38
+39," some but failure trying to create some cool characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9199999570846558,68.5140609741211,37
+40," some but failure trying to create some characters .
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9149999618530273,67.65079498291016,36
+41," some but failure trying to create some characters
+Sent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9350000023841858,81.37452697753906,35
+42," some but failure trying to create some charactersSent: terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9099999666213989,91.8734359741211,34
+43," some but failure trying to create some charactersSent terribleReview: of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9399999976158142,104.4940414428711,33
+44," some but failure trying to create some charactersSent terribleReview of
+Sent: great
+Review: {sentence_1}Sent: {mask_token}",0.9149999618530273,112.38150024414062,32
+45," some but failure trying to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}Sent: {mask_token}",0.9300000071525574,106.619140625,31
+46," some but failure trying to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9300000071525574,139.14369201660156,29
+47," but failure trying to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9350000023841858,136.9968719482422,28
+48," failure trying to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9099999666213989,134.39695739746094,27
+49," trying to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9049999713897705,136.35968017578125,26
+50," to create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9049999713897705,133.85980224609375,25
+51," create some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9350000023841858,134.5819854736328,24
+52," some charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9049999713897705,133.1353302001953,23
+53," charactersSent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9350000023841858,135.14305114746094,22
+54,"Sent terribleReview of
+Sent: great
+Review {sentence_1}: {mask_token}",0.9199999570846558,132.58792114257812,21
+55,"Sent terribleReview
+Sent: great
+Review {sentence_1}: {mask_token}",0.9199999570846558,131.2270965576172,20
+56,"Sent terribleReviewSent: great
+Review {sentence_1}: {mask_token}",0.9199999570846558,125.85252380371094,19
+57,"Sent terribleReview: great
+Review {sentence_1}: {mask_token}",0.9049999713897705,133.82208251953125,18
+58,"Sent terribleReview great
+Review {sentence_1}: {mask_token}",0.9149999618530273,127.9742660522461,17
+59,"Sent terribleReview
+Review {sentence_1}: {mask_token}",0.9149999618530273,132.59249877929688,16
+60,Sent terribleReviewReview {sentence_1}: {mask_token},0.9249999523162842,133.52647399902344,15
+61, terribleReviewReview {sentence_1}: {mask_token},0.9049999713897705,130.17005920410156,14

@@ -1,4 +1,5 @@
 *.ipynb_checkpoints/
 *.swp
 *.ipynb
+*PrunedPrompts_by_*/
 *style_classifiers/
