@@ -1,5 +1,6 @@
 *.ipynb_checkpoints/
 *.swp
 *.ipynb
-./examples/classification/PrunedPrompts_by_*/
+./examples/classification/PrunedPrompts_by_TAPruning/
+*__pycache__/
 *style_classifiers/
