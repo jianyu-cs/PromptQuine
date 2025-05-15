@@ -43,7 +43,6 @@ class TextStyleTransferOutputSelector:
     def __init__(
         self, 
         style_classifier: str,
-        style_tokenizer: str,
         style_batch_size: int,
         device_id: int
     ): 

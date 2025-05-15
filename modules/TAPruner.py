@@ -33,14 +33,17 @@ class TAPruner(Pruner):
                  task_lm: str, evaluator_task: str, prompt: Optional[str] = None,
                  mode: str = "vLLM", threshold: int = 1, num_devices: int = 1,
                  # used for ClassificationEvaluator
-                 dataset: str = "", is_mask_lm: str = False) -> None:
+                 dataset: str = "", is_mask_lm: str = False, style_classifier_path: str = None，
+                 style_batch_size: int = -1, style_classifier_device_id: int = None):
         assert evaluator_task in ["classification", "style_transfer", "math_reasoning"]
         if evaluator_task == "classification":
             self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode, num_devices)
         elif evaluator_task == "reasoning":
             self.tester = prompt_evaluator(task_lm, dataset, prompt, num_devices)
         elif evaluator_task == "style_transfer":
-            self.tester = prompt_evaluator(task_lm, dataset, prompt, mode, num_devices)
+            assert style_batch_size != -1 and style_classifier_device_id != None and style_classifier_path != None
+            self.tester = prompt_evaluator(task_lm, dataset, prompt, mode, num_devices, 
+                            style_batch_size, style_classifier_path, style_classifier_device_id)
         
         self.task_lm = task_lm
         self.threshold = threshold # 1 => greedy

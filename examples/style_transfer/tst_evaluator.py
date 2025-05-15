@@ -13,6 +13,9 @@ class PromptedStyleTransferEvaluator:
         dataset: str,
         prompt: Optional[str],
         num_devices: int,
+        style_batch_size: int,
+        style_classifier_path: str,
+        style_classifier_device_id: int,
     ):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
@@ -26,6 +29,8 @@ class PromptedStyleTransferEvaluator:
         self._generator = PromptedGenerator(model=task_lm, end_punct='"',
             pad_token='<|endoftext|>', lower_outputs=False, 
             control_output_length=False, num_devices=num_devices)
+        self._selector = TextStyleTransferOutputSelector(style_classifier=style_classifier_path,
+                style_batch_size=style_batch_size, device_id=style_classifier_device_id)
         
         self._generator.config.pad_token_id = self._tokenizer.pad_token_id
 
