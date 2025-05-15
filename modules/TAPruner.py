@@ -28,7 +28,7 @@ class TAPruner(Pruner):
     
     def __init__(self, 
                  prompt_evaluator: Optional[PromptedClassificationEvaluator, 
-                             PromptedReasoningEvaluator], 
+                             PromptedReasoningEvaluator, TextStyleTransferEvaluator], 
                              #PromptedStyleTransferEvaluator, PromptedMathReasoningEvaluator],
                  task_lm: str, evaluator_task: str, prompt: Optional[str] = None,
                  mode: str = "vLLM", threshold: int = 1,
@@ -36,18 +36,12 @@ class TAPruner(Pruner):
                  dataset: str = "", is_mask_lm: str = False) -> None:
         assert evaluator_task in ["classification", "style_transfer", "math_reasoning"]
         if evaluator_task == "classification":
-            self.tester = prompt_evaluator(
-                task_lm,
-                is_mask_lm,
-                dataset,
-                prompt,
-                mode)
-        elif evaluator_task == "math_reasoning":
-            self.tester = prompt_evaluator(
-                task_lm,
-                dataset,
-                prompt,
-                mode)
+            self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode)
+        elif evaluator_task == "reasoning":
+            self.tester = prompt_evaluator(task_lm, dataset, prompt)
+        elif evaluator_task == "style_transfer":
+            self.tester = prompt_evaluator(task_lm, dataset, prompt, mode)
+        
         self.task_lm = task_lm
         self.threshold = threshold # 1 => greedy
     

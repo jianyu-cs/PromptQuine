@@ -9,7 +9,7 @@ from itertools import compress
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, LlamaTokenizer
 from typing import Optional, Union, List, Dict, Any
-from fsc_evaluator import PromptedClassificationEvaluator
+from tst_evaluator import TextStyleTransferEvaluator
 # TODO
 sys.path.append("../../")
 from modules.TAPruner import TAPruner
@@ -23,37 +23,17 @@ def main(args):
         os.path.join('..', get_style_classifier(args.classifier_setup, args.dataset))
     # 2. load dataset
     base_path="./data"
-    source_texts, target_labels, _ = \
+    source_texts, target_labels, ref_texts = \
             load_text_style_transfer_test_data(
             args.direction, args.dataset,
             base_path=base_path, max_size=args.num_samples,
             max_length=None,
             max_length_tokenizer=args.model)
     
-    if args.pruner == "PromptQuine":
-        source_texts_list, labels_list = make_balanced_classification_dataset(
-            args.dataset,
-            args.dataset_seed,
-            base_path,
-            args.num_shots,
-            args.model,
-            args.dataset_split,
-            args.dataset_split_seed,
-        )
-    
-    elif args.pruner == "TAPruning":
-        (valid_dataset, num_classes, verbalizers, template) = make_classification_dataset(
-            args.dataset, args.dataset_seed, base_path, args.model, args.data_mode)
-    # TODO, for TAPruning for now.
-    valid_loader = DataLoader(valid_dataset,
-                             shuffle=False,
-                             batch_size=512,
-                             drop_last=False)
-    
     # 1. Load ICL Prompts for Pruning
     direction_mapping = {"1_to_0": "negative", "0_to_1": "positive"}
     prompts_path = f"../../prompts/sentiment_transfer_prompts/few_shot_natural_prompts_{direction_mapping[args.direction]}_{args.ICL_shots}shot.jsonl"
-        
+
     prompt_dict_list = [] 
     with open(prompts_path, 'r') as prompt_jsons:
         prompt_json_lists = list(prompt_jsons)
@@ -62,18 +42,18 @@ def main(args):
     prompt = prompt_dict_list[args.ICL_index]['prompt']
     
     # 2. Setup the Pruner
-    # TODO, Next!!!
     if args.pruner == "PromptQuine":
         pass
     elif args.pruner == "TAPruning":
-        pruner = TAPruner(PromptedClassificationEvaluator, args.model, "classification", None, "vLLM", # automatically switch to HF if Mask LM
-                 threshold=0.96, dataset = args.dataset, is_mask_lm = args.is_mask_lm)
+        pruner = TAPruner(TextStyleTransferEvaluator, args.model, "style_transfer", None, "vLLM",
+                 threshold=0.96, dataset = args.dataset, is_mask_lm = False)
     # 3. Perform Pruning
     """
     Structure of prompt_queues: [(prompt, accuracy on valid set, reward on valid set, prompt_length, mask)] 
     """
-    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=args.reward_driven,
+    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=False,
                 fix_prune_order=args.fix_prune_order)
+    
     # 4. Save the collection of prompts
     prompt_queues = [(p, acc.item(), r.item(), l, m) for p, acc, r, l, m in prompt_queues]
     prompt_collection_df = pd.DataFrame(prompt_queues, columns=['prompt', 'acc', 'reward', '#tokens', "mask"])
