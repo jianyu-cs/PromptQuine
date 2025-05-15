@@ -45,7 +45,8 @@ class PromptedReasoningEvaluator:
         self,
         task_lm: str,
         dataset: str,
-        prompt: Optional[str]
+        prompt: Optional[str],
+        num_devices: int,
     ):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
@@ -56,7 +57,7 @@ class PromptedReasoningEvaluator:
         
         self._tokenizer = AutoTokenizer.from_pretrained(
             self.task_lm, pad_token='<|endoftext|>')
-        self._generator = LLM(task_lm, tensor_parallel_size=config.num_devices, 
+        self._generator = LLM(task_lm, tensor_parallel_size=num_devices, 
                               dtype="half")
         
         self._generator.config.pad_token_id = self._tokenizer.pad_token_id

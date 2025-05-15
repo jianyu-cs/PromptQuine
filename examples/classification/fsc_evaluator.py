@@ -72,6 +72,7 @@ class PromptedClassificationEvaluator:
         dataset: str,
         prompt: Optional[str],
         mode: str = "vLLM",
+        num_devices: int = 1
     ):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
@@ -99,7 +100,7 @@ class PromptedClassificationEvaluator:
                                    .from_pretrained(self.task_lm)
                                    .to(self.device))
             elif mode == "vLLM":
-                self._generator = LLM(task_lm, tensor_parallel_size=config.num_devices, 
+                self._generator = LLM(task_lm, tensor_parallel_size=num_devices, 
                                       dtype="half")
             self._generator.config.pad_token_id = self._tokenizer.pad_token_id
         self.verbalizers = self._tokenizer.encode(load_verbalizers(self.task_lm, dataset))

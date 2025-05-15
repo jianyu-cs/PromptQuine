@@ -57,7 +57,7 @@ def main(args):
         pass
     elif args.pruner == "TAPruning":
         pruner = TAPruner(PromptedClassificationEvaluator, args.model, "classification", None, "vLLM", # automatically switch to HF if Mask LM
-                 threshold=0.96, dataset = args.dataset, is_mask_lm = args.is_mask_lm)
+                 threshold=0.96, num_devices=args.num_devices, dataset = args.dataset, is_mask_lm = args.is_mask_lm)
     # 3. Perform Pruning
     """
     Structure of prompt_queues: [(prompt, accuracy on valid set, reward on valid set, prompt_length, mask)] 
@@ -117,6 +117,7 @@ if __name__ == "__main__":
     parser.add_argument('--prune_order_seed', type=int, default=0, help='If not fixing the order, provide the seed (applicable to TAPruning Only)')
     parser.add_argument('--ICL_shots', type=int, default= 1, help='Scaling the shots for ICL, tycically setting to 1')
     parser.add_argument('--ICL_index', type=int, default= 0, help='Index of the ICL prompt')
+    parser.add_argument('--num_devices', type=int, default= 1, help='Number of the devices')
     
     args = parser.parse_args()
     

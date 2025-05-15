@@ -31,16 +31,16 @@ class TAPruner(Pruner):
                              PromptedReasoningEvaluator, TextStyleTransferEvaluator], 
                              #PromptedStyleTransferEvaluator, PromptedMathReasoningEvaluator],
                  task_lm: str, evaluator_task: str, prompt: Optional[str] = None,
-                 mode: str = "vLLM", threshold: int = 1,
+                 mode: str = "vLLM", threshold: int = 1, num_devices: int = 1,
                  # used for ClassificationEvaluator
                  dataset: str = "", is_mask_lm: str = False) -> None:
         assert evaluator_task in ["classification", "style_transfer", "math_reasoning"]
         if evaluator_task == "classification":
-            self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode)
+            self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode, num_devices)
         elif evaluator_task == "reasoning":
-            self.tester = prompt_evaluator(task_lm, dataset, prompt)
+            self.tester = prompt_evaluator(task_lm, dataset, prompt, num_devices)
         elif evaluator_task == "style_transfer":
-            self.tester = prompt_evaluator(task_lm, dataset, prompt, mode)
+            self.tester = prompt_evaluator(task_lm, dataset, prompt, mode, num_devices)
         
         self.task_lm = task_lm
         self.threshold = threshold # 1 => greedy

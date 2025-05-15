@@ -17,28 +17,23 @@ from vllm import LLM, SamplingParams
 class PromptedGenerator:
     def __init__(
         self,
-        config,
         model: str,
-        template: str,
         end_punct: str,
         pad_token: str,
-        device_id: int,
         lower_outputs: bool,
         control_output_length: bool,
-        mp_size=4,
-        batch_size=1
+        num_devices=1,
     ):
         # vLLM support
         self.tokenizer = AutoTokenizer.from_pretrained(retrieve_model_link(config, model),
                                             pad_token=pad_token)
-        self.generator = LLM(retrieve_model_link(config, model), dtype='float16', tensor_parallel_size=config.num_devices)
+        self.generator = LLM(model, dtype='float16', tensor_parallel_size=num_devices,
+                                            dtype="half")
          
         self.model = model
-        self.template = template
-        self.batch_size=batch_size
+        self.template = "{prompt} \"{sentence_1}\" \""
         self.end_punct = end_punct
         self.lower_outputs = lower_outputs
-        self.device_id = device_id
         self.control_output_length = control_output_length
 
     def _get_max_new_tokens(
