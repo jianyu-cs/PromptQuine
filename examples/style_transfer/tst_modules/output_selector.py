@@ -6,6 +6,39 @@ from transformers import pipeline
 from bert_score import BERTScorer
 from typing import Tuple, List, Union
 
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch.nn.functional as F
+
+
+class FastClassifier:
+    def __init__(self, model_name_or_path, device="cuda", tokenizer_name=None):
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path) if tokenizer_name == None else AutoTokenizer.from_pretrained(tokenizer_name)
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name_or_path).to(device) 
+        self.model.eval()
+        self.device = device
+    
+        self.label_map = {i: f"LABEL_{i}" for i in range(self.model.config.num_labels)}
+
+    def __call__(self, dataset, batch_size=8, truncation=True):
+        results = []
+        texts = [dataset[i] for i in range(len(dataset))]
+
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            inputs = self.tokenizer(batch, return_tensors='pt', padding=True, truncation=truncation).to(self.device)
+
+            with torch.no_grad():
+                logits = self.model(**inputs).logits
+                probs = F.softmax(logits, dim=-1)
+
+            for prob in probs:
+                score, idx = prob.max(dim=0)
+                label = self.label_map[idx.item()]
+                results.append({"label": label, "score": score.item()})
+
+        return results
+
+
 class TextStyleTransferOutputSelector: 
     def __init__(
         self, 
@@ -18,26 +51,25 @@ class TextStyleTransferOutputSelector:
         if 'facebook' in style_classifier:
             self.style_classifier = pipeline("zero-shot-classification",
                     model="facebook/bart-large-mnli",
-                    device=self.device)#self.device)
+                    device=self.device)
             self.nli = True
         else:
-            self.style_classifier = pipeline("sentiment-analysis",
-                                         model=style_classifier,
-                                         tokenizer='/mnt/workspace/workgroup_dev/zhiqiang/huggingface_models/hub/bert-base-uncased/',
-                                         device=self.device)#self.device)
+            self.style_classifier = FastClassifier(
+                        model_name_or_path=style_classifier,
+                        tokenizer_name='/mnt/workspace/workgroup_dev/zhiqiang/huggingface_models/hub/bert-base-uncased/',
+                        device=self.device)
             self.nli = False
         self.style_batch_size = style_batch_size
         self.bert_scorer = BERTScorer('roberta-large', 
-                                      device=self.device,#self.device, 
+                                      device="cuda",
                                       rescale_with_baseline=True, 
                                       lang='en')
         
         # Grammaticality model
-        self.fluency_classifier = pipeline(
-            'text-classification',
-            model='/mnt/workspace/workgroup_dev/jianyu/cointegrated', #'cointegrated/roberta-large-cola-krishna2020',
+        self.fluency_classifier = FastClassifier(
+            model_name_or_path='/mnt/workspace/workgroup_dev/jianyu/cointegrated',
             device=self.device)
-        self.fluency_batch_size = 4#fluency_batch_size
+        self.fluency_batch_size = 4
 
     def compute_sample_rewards(
         self, 
@@ -56,17 +88,16 @@ class TextStyleTransferOutputSelector:
         hypo_dataset = ListDataset(hypos)
         batch_size = self.style_batch_size
         style_rewards = []
-        if True:
-            for i, c in enumerate(self.style_classifier(hypo_dataset,
-                                                    batch_size=batch_size, 
-                                                    truncation=True)):
-                prob = ((c['label'] == target_label) * c['score']
-                    + (c['label'] != target_label) * (1 - c['score']))
-                style_rewards.append(prob * 100)
-                sum_rewards = [(c + s) / 2 \
-                       for c, s in zip(content_rewards, style_rewards)]
-        #elif nli == True:
-        #    for i, c in enumerate(self.style_classifier(hypo_dataset,
+        
+        for i, c in enumerate(self.style_classifier(hypo_dataset,
+                                                batch_size=batch_size, 
+                                                truncation=True)):
+            print(c['label'], c['score'], target_label, type(target_label))
+            prob = ((c['label'] == target_label) * c['score']
+                + (c['label'] != target_label) * (1 - c['score']))
+            style_rewards.append(prob * 100)
+            sum_rewards = [(c + s) / 2 \
+                   for c, s in zip(content_rewards, style_rewards)]
 
         return sum_rewards, content_rewards, style_rewards
         
@@ -80,7 +111,7 @@ class TextStyleTransferOutputSelector:
         output_rewards = []
         output_contents = []
         output_styles = []
-        # print("PREDICT", len(source_texts),"WOW", len(generated_texts)) 200. 200
+        
         for i,(src, hypos, label) in enumerate(zip(source_texts, generated_texts, 
                                           target_labels)):
             
@@ -94,12 +125,9 @@ class TextStyleTransferOutputSelector:
 
             rewards, contents, styles = self.compute_sample_rewards(src, hypos, 
                                                                     label)
-            max_reward = max(rewards)#torch.tensor(rewards).float().max()
-            #print(max_reward)
-            top_index = rewards.index(max_reward)#.float())
-            #print(top_index)
-            #print(hypos[top_index])
-            #print("78&&&&&&&&&&")
+            max_reward = max(rewards)
+        
+            top_index = rewards.index(max_reward)
 
             output_texts.append(hypos[top_index])
             output_rewards.append(rewards[top_index])
@@ -107,34 +135,23 @@ class TextStyleTransferOutputSelector:
             output_styles.append(styles[top_index])
                               
         return output_texts, output_rewards, output_contents, output_styles
-    # Newly added function: TODO
+    
     def evaluate_output(self,
                         source_texts: List[str],
                         output_texts: List[str],
                         target_labels: List[str],
                         ref_texts: Union[List[str], List[List[str]]]):
-        # print(output_texts)
-        # print(output_texts)
+        
         if isinstance(ref_texts[0], str):
             ref_texts = [[ref] for ref in ref_texts]
-            
-        #srcs = [source_text for _ in generated_texts]
-        #hypos = output_texts
-        print("****")
-        print(source_texts[-1])
-        print(output_texts[-1])
         
         output_dataset = ListDataset(output_texts)
 
-        # print('Computing Content Preservation')
-        #print(output_texts)
-        #print(source_texts)
         ctc_scores = self.bert_scorer.score(output_texts, source_texts)[2]
         content_scores = [max(s, 0) * 100 for s in ctc_scores.tolist()]
         content_scores = np.array(content_scores)
         content = round(content_scores.mean(), 1)
 
-        # print('Computing Style Accuracy')
         style_corrects = []
         batch_size = self.style_batch_size
         for i, c in enumerate(self.style_classifier(output_dataset,
@@ -144,7 +161,6 @@ class TextStyleTransferOutputSelector:
         style_corrects = np.array(style_corrects)
         style = round(100 * style_corrects.mean(), 1)
 
-        # print('Computing Fluency')
         fluency_corrects = []
         fluency_label = 'LABEL_0'
         batch_size = self.fluency_batch_size
@@ -155,19 +171,18 @@ class TextStyleTransferOutputSelector:
         fluency_corrects = np.array(fluency_corrects)
         fluency = round(100 * fluency_corrects.mean(), 1)
 
-        # print('Computing Joint Score')
         joint_scores = content_scores * style_corrects * fluency_corrects
         joint_score = round(joint_scores.mean(), 1)
         
         prejoint_scores = content_scores * style_corrects
         prejoint_score = round(prejoint_scores.mean(), 1)
 
-        # print('Computing Geometric Avg')
         gm = np.exp((np.log(content) + np.log(style) + np.log(fluency)) / 3)
         gm = round(gm, 1)
 
         return (content, style, fluency, joint_score, gm,
                 0, content, 0, prejoint_score)
+    
 
 class ListDataset(Dataset):
     def __init__(self, data_list):

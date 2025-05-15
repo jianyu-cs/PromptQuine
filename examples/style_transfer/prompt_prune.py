@@ -22,18 +22,14 @@ def main(args):
     style_classifier = \
         os.path.join('..', get_style_classifier(args.classifier_setup, args.dataset))
     # 2. load dataset
+    base_path="./data"
     source_texts, target_labels, _ = \
             load_text_style_transfer_test_data(
             args.direction, args.dataset,
-            dataset_seed: int,
-            base_path: str,
-            max_size: int,
-            max_length: int,
-            max_length_tokenizer: str
+            base_path=base_path, max_size=args.num_samples,
+            max_length=None,
+            max_length_tokenizer=args.model)
     
-    base_path = "./data"
-    dataset_description = args.dataset
-    args.dataset = args.dataset.replace("-random", "")
     if args.pruner == "PromptQuine":
         source_texts_list, labels_list = make_balanced_classification_dataset(
             args.dataset,
@@ -44,7 +40,7 @@ def main(args):
             args.dataset_split,
             args.dataset_split_seed,
         )
-        # TODO
+    
     elif args.pruner == "TAPruning":
         (valid_dataset, num_classes, verbalizers, template) = make_classification_dataset(
             args.dataset, args.dataset_seed, base_path, args.model, args.data_mode)
@@ -55,14 +51,9 @@ def main(args):
                              drop_last=False)
     
     # 1. Load ICL Prompts for Pruning
-    if "random" in dataset_description:
-        # Random Verbalizers (e.g., counter-intuitive)
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/randomlabelwords_few_shot_natural_prompts.jsonl"
-    else:
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot.jsonl" \
-            if args.is_mask_lm == False else \
-                f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot_masked.jsonl"
-    
+    direction_mapping = {"1_to_0": "negative", "0_to_1": "positive"}
+    prompts_path = f"../../prompts/sentiment_transfer_prompts/few_shot_natural_prompts_{direction_mapping[args.direction]}_{args.ICL_shots}shot.jsonl"
+        
     prompt_dict_list = [] 
     with open(prompts_path, 'r') as prompt_jsons:
         prompt_json_lists = list(prompt_jsons)
@@ -71,6 +62,7 @@ def main(args):
     prompt = prompt_dict_list[args.ICL_index]['prompt']
     
     # 2. Setup the Pruner
+    # TODO, Next!!!
     if args.pruner == "PromptQuine":
         pass
     elif args.pruner == "TAPruning":
@@ -116,10 +108,11 @@ def main(args):
 if __name__ == "__main__":
     starttime = datetime.datetime.now()
     
-    parser = argparse.ArgumentParser(description='Prompt pruning for classification.')
+    parser = argparse.ArgumentParser(description='Prompt pruning for style transfer.')
     parser.add_argument('--data_mode', type=str, default= "reduce", help='dataset mode for TAPruning')
     parser.add_argument('--model', type=str, default= "openai-community/gpt2", help='Full huggingface model name')
-    parser.add_argument('--num_shots', type=int, default=16, help='Dataset shots for pruning')
+    parser.add_argument('--num_samples', type=int, default=100, help='Dataset samples for pruning')
+    parser.add_argument('--proxy_samples', type=int, default=50, help='Dataset proxy samples for pruning (early stopping)')
     parser.add_argument('--dataset', type=str, default= "yelp", \
                         choices = ["yelp"], help='Dataset description')
     parser.add_argument('--direction', type=str, default= "1_to_0", help='TST style transfer direction')

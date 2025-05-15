@@ -112,7 +112,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    main(args)-
+    main(args)
     
     endtime = datetime.datetime.now()
     print(endtime-starttime)
