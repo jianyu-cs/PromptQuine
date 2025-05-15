@@ -31,7 +31,7 @@ def main(args):
     elif args.pruner == "TAPruning":
         (valid_dataset, num_classes, verbalizers, template) = make_reasoning_dataset(
             args.dataset, args.data_mode, base_path, args.num_samples)
-    # TODO, next!!!!
+    
     # TODO, for TAPruning for now.
     valid_loader = DataLoader(valid_dataset,
                              shuffle=False,
@@ -39,13 +39,7 @@ def main(args):
                              drop_last=False)
     
     # 1. Load ICL Prompts for Pruning
-    if "random" in dataset_description:
-        # Random Verbalizers (e.g., counter-intuitive)
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/randomlabelwords_few_shot_natural_prompts.jsonl"
-    else:
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot.jsonl" \
-            if args.is_mask_lm == False else \
-                f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot_masked.jsonl"
+    prompts_path = f"../../prompts/reasoning_prompts/{args.dataset}_few_shot_natural_prompts_{args.ICL_shots}shot.jsonl"
     
     prompt_dict_list = [] 
     with open(prompts_path, 'r') as prompt_jsons:
@@ -58,8 +52,10 @@ def main(args):
     if args.pruner == "PromptQuine":
         pass
     elif args.pruner == "TAPruning":
-        pruner = TAPruner(PromptedClassificationEvaluator, args.model, "classification", None, "vLLM", # automatically switch to HF if Mask LM
-                 threshold=0.96, dataset = args.dataset, is_mask_lm = args.is_mask_lm)
+        pruner = TAPruner(PromptedReasoningEvaluator, args.model, "reasoning", None, "vLLM",
+                 threshold=0.96, dataset = args.dataset, is_mask_lm = False)
+    elif args.pruner == "SAHCPruning":
+        pass
     # 3. Perform Pruning
     """
     Structure of prompt_queues: [(prompt, accuracy on valid set, reward on valid set, prompt_length, mask)] 
