@@ -23,13 +23,8 @@ def main(args):
     args.dataset = args.dataset.replace("-random", "")
     if args.pruner == "PromptQuine":
         source_texts_list, labels_list = make_balanced_classification_dataset(
-            args.dataset,
-            args.dataset_seed,
-            base_path,
-            args.num_shots,
-            args.model,
-            args.dataset_split,
-            args.dataset_split_seed,
+            args.dataset, args.dataset_seed, base_path, args.num_shots,
+            args.model, args.dataset_split, args.dataset_split_seed,
         )
         # TODO
     elif args.pruner == "TAPruning":

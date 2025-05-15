@@ -24,13 +24,12 @@ def main(args):
     # 2. load dataset
     source_texts, target_labels, _ = \
             load_text_style_transfer_test_data(
-            args.dataset, label: int,
-            split: str,
-            dataset_seed: Optional[int],
+            args.direction, args.dataset,
+            dataset_seed: int,
             base_path: str,
-            max_size: Optional[int],
-            max_length: Optional[int],
-            max_length_tokenizer: Optional[str])
+            max_size: int,
+            max_length: int,
+            max_length_tokenizer: str
     
     base_path = "./data"
     dataset_description = args.dataset
@@ -121,8 +120,9 @@ if __name__ == "__main__":
     parser.add_argument('--data_mode', type=str, default= "reduce", help='dataset mode for TAPruning')
     parser.add_argument('--model', type=str, default= "openai-community/gpt2", help='Full huggingface model name')
     parser.add_argument('--num_shots', type=int, default=16, help='Dataset shots for pruning')
-    parser.add_argument('--dataset', type=str, default= "yelp", 
+    parser.add_argument('--dataset', type=str, default= "yelp", \
                         choices = ["yelp"], help='Dataset description')
+    parser.add_argument('--direction', type=str, default= "1_to_0", help='TST style transfer direction')
     parser.add_argument('--pruner', type=str, default= "TAPruning", choices = ["TAPruning", "PromptQuine"], help='Pruning algorithm used.')
     parser.add_argument('--fix_prune_order', type=bool, default=True, help='Indicator: whether to fix the pruning order (e.g., TAPruning)')
     parser.add_argument('--TAPruning_threshold', type=float, default=0.96, help='Threshold for TAPruning')

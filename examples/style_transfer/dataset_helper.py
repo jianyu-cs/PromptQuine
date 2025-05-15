@@ -34,17 +34,21 @@ def make_text_style_transfer_datasets(
     return data_dict['train'], data_dict['dev'], data_dict['test']
 
 
-def load_text_style_transfer_test_data(config: "DictConfig"): 
-    label = int(config.direction[0])
+def load_text_style_transfer_test_data(
+    direction: str,
+    dataset: str,
+    base_path: str,
+    max_size: int,
+    max_length: int,
+    max_length_tokenizer: str
+): 
+    label = int(direction[0])
     source_texts, target_labels = load_text_style_transfer_dataset(
-        config.dataset, label, 'dev',
-        config.dataset_seed, config.base_path, config.max_size,
-        config.max_length, config.max_length_tokenizer)
+        dataset, label, 'dev', None, base_path, max_size,
+        max_length, max_length_tokenizer)
     
     ref_texts, _ = load_text_style_transfer_dataset(
-        config.dataset, label, 'ref', 
-        config.dataset_seed, config.base_path, None, 
-        None, None)
+        dataset, label, 'ref', None, base_path, None, None, None)
 
     return source_texts, target_labels, ref_texts
 

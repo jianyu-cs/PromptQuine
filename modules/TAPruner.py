@@ -20,6 +20,7 @@ from typing import Optional, Union, List, Dict, Any, Tuple
 from utils.task_wrappers import colorful_print, create_tabulist, PromptedTaskWrapperBase
 # TODO
 from examples.classification.fsc_evaluator import PromptedClassificationEvaluator
+from examples.reasoning.reasoning_evaluator import PromptedReasoningEvaluator
 
 
 class TAPruner(Pruner):
@@ -41,6 +42,12 @@ class TAPruner(Pruner):
             self.tester = prompt_evaluator(
                 task_lm,
                 is_mask_lm,
+                dataset,
+                prompt,
+                mode)
+        elif evaluator_task == "math_reasoning":
+            self.tester = prompt_evaluator(
+                task_lm,
                 dataset,
                 prompt,
                 mode)
