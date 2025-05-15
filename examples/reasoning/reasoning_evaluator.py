@@ -14,14 +14,38 @@ from vllm import LLM, SamplingParams
 
 from typing import Optional, Tuple, List, Any
         
-        
+    
+def process_outputs(outputs, test_data):
+    assert len(outputs) == len(test_data), "outputs and training data should have the same length"
+    correct = 0
+    for i in range(len(outputs)):
+        generations = []
+        ans_pred_dict = {}
+        for j in range(len(outputs[i].outputs)):
+            generation = {
+                "generation": outputs[i].outputs[j].text,
+                "answer_pred": get_answer(outputs[i].outputs[j].text),
+            }
+            generations.append(generation)
+            if generation["answer_pred"] not in ans_pred_dict:
+                ans_pred_dict[generation["answer_pred"]] = 1
+            else:
+                ans_pred_dict[generation["answer_pred"]] += 1
+        test_data[i]["generations"] = generations
+        sorted_ans_pred = sorted(ans_pred_dict, reverse=True)
+        pred_answer = sorted_ans_pred[0]
+        if pred_answer == float(test_data[i]["answer"]):
+            correct += 1
+    accuracy = correct / len(test_data)
+    
+    return test_data, accuracy
+
 class PromptedReasoningEvaluator:
     def __init__(
         self,
         task_lm: str,
         dataset: str,
-        prompt: Optional[str],
-        mode: str = "vLLM",
+        prompt: Optional[str]
     ):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
@@ -36,56 +60,15 @@ class PromptedReasoningEvaluator:
                               dtype="half")
         
         self._generator.config.pad_token_id = self._tokenizer.pad_token_id
-        self.verbalizers = self._tokenizer.encode(load_verbalizers(self.task_lm, dataset))
 
-        self.verbalizer_ids = [self._tokenizer.convert_tokens_to_ids(v)
-                               for v in load_verbalizers(self.task_lm, dataset)]
         if prompt is None:
             self.template = self.load_default_template()  # prompt templates
         else:
             self.template = prompt
 
-    # Adapted from
-    # https://huggingface.co/docs/transformers/v4.21.1/en/task_summary#masked-language-modeling
-    def _get_mask_token_index(self, input_ids: torch.Tensor) -> np.ndarray:
-        mask_token_index = torch.where(
-            input_ids == self._tokenizer.mask_token_id)[1]
-        return mask_token_index
-
     def load_default_template(self) -> List[str]:
-        if self.is_mask_lm:
-            template = "{sentence_1} {prompt} <mask> ."
-        else:
-            # Template for left-to-right LMs like GPT-2
-            template = "{sentence_1} {prompt}"
-
+        template = "{sentence_1} {prompt}"
         return template
-
-    @torch.no_grad()
-    def _get_logits(
-        self,
-        texts: List[str]
-    ) -> torch.Tensor:
-        # for MLM, add mask token
-        batch_size = len(texts)
-        encoded_inputs = self._tokenizer(texts, padding='longest',
-                                         truncation=True, return_tensors="pt",
-                                         add_special_tokens=True)
-
-        if self.is_mask_lm:
-            # self.ensure_exactly_one_mask_token(encoded_inputs) TODO
-            token_logits = self._generator(
-                **encoded_inputs.to(self.device)).logits
-            mask_token_indices = \
-                self._get_mask_token_index(encoded_inputs['input_ids'])
-            out_logits = token_logits[range(batch_size), mask_token_indices, :]
-        else:
-            token_logits = self._generator(
-                **encoded_inputs.to(self.device)).logits
-            input_lengths = encoded_inputs['attention_mask'].sum(dim=1)
-            out_logits = token_logits[range(batch_size), input_lengths - 1, :]
-
-        return out_logits
 
     def _format_prompts(
         self,
@@ -93,120 +76,41 @@ class PromptedReasoningEvaluator:
         *source_strs: List[List[str]]
     ) -> List[str]:
         """Use str.replace, instead of str.format, for special prompts"""
-        if self.is_mask_lm and self.dataset not in ['snli', 'piqa']:
-            mask_token = self._tokenizer.mask_token
-            return [self.template.replace("{sentence_1}", s_1).replace("{prompt}", prompt).replace("{mask_token}", 
-                    mask_token) for s_1, prompt in zip(source_strs[0], prompts)]
-        elif self.dataset not in ['snli', 'piqa']:
-            return [self.template.replace("{sentence_1}", s_1).replace("{prompt}", prompt)
-                    for s_1, prompt in zip(source_strs[0], prompts)]
-        elif self.is_mask_lm and self.dataset == 'snli':
-            mask_token = self._tokenizer.mask_token
-            return [self.template.replace("{sentence_1}", s_1).replace("{sentence_2}", s_2)
-                    .replace("{prompt}", prompt).replace("{mask_token}", mask_token) 
-                    for s_1, s_2, prompt in zip(source_strs[0], source_strs[1], prompts)]
-        elif self.dataset == 'snli':
-            return [self.template.replace("{sentence_1}", s_1).replace("{sentence_2}", s_2)
-                    .replace("{prompt}", prompt) for s_1, s_2, prompt in zip(source_strs[0], source_strs[1], prompts)]
-        elif self.is_mask_lm and self.dataset == 'piqa':
-            mask_token = self._tokenizer.mask_token
-            return [self.template.replace("{question_1}", s_1).replace("{option_1}", s_2).replace("{option_2}", s_3)
-                    .replace("{prompt}", prompt).replace("{mask_token}", mask_token) 
-                    for s_1, s_2, s_3, prompt in zip(source_strs[0], source_strs[1], source_strs[2], prompts)]
-        elif self.dataset == 'piqa':
-            return [self.template.replace("{question_1}", s_1).replace("{option_1}", s_2)
-                    .replace("{option_2}", s_3).replace("{prompt}", prompt)
-                    for s_1, s_2, s_3, prompt in zip(source_strs[0], source_strs[1], source_strs[2], prompts)]
+        return [self.template.replace("{sentence_1}", s_1).replace("{prompt}", prompt)
+                for s_1, prompt in zip(source_strs[0], prompts)]
 
+    @torch.no_grad()
     def forward(
         self,
         dataloader: Any,
         prompt: Optional[str]
     ) -> float:
+        """Only support vLLM here."""
         num_of_examples = dataloader.dataset.__len__()
         correct_sum = 0
-        gap_sums = []
         
         if prompt:
             self.template = prompt
             
-        if self.mode == 'vLLM':
-            # vLLM configurations
-            sampling_params = SamplingParams(temperature=1, top_k=-1, max_tokens=1, allowed_token_ids=self.verbalizer_ids, logprobs=len(self.verbalizer_ids))
-
+        # vLLM configurations
+        sampling_params = SamplingParams(temperature=1, top_k=-1, max_tokens=1, allowed_token_ids=self.verbalizer_ids, logprobs=len(self.verbalizer_ids))
+        all_outputs = []
+        all_inputs = []
         for i, batch in enumerate(dataloader):
             # Dataset Parsing
             inputs = batch['source_texts']  # List
             if type(inputs[0]) != list:
                 inputs = [inputs]
-            targets = batch['class_labels']  # Tensor
+            targets = batch['target_labels']  # Tensor
             batch_size = targets.size(0)
             # Prompt Setups
             current_prompts = [prompt for _ in range(batch_size)]
             formatted_templates = self._format_prompts(current_prompts, *inputs)
-            # Mode: Huggingface
-            if self.mode == 'HF':
-                all_logits = self._get_logits(formatted_templates)
-                class_probs = torch.softmax(all_logits[:, self.verbalizer_ids], -1)
-                # Rewards - RLPrompt
-                label_probs = class_probs[range(batch_size), targets]
-                # [batch_size, 1]
-                not_label_probs = torch.where(
-                    class_probs == label_probs.unsqueeze(1),
-                    torch.Tensor([-1]).to(self.device), class_probs)
-                # [batch_size, num_classes]
-                max_not_label_probs, _ = torch.max(not_label_probs, -1)
-                gap = label_probs - (max_not_label_probs) #- max_not_label_probs
-                # compute gaps
-                correct = (gap > 0).long()
-                gap_rewards = gap * (200 * correct \
-                                 + 180 * (1 - correct))
-                
-                gap_sums.append(gap_rewards.mean())
-                
-                # Get labels
-                predicted_labels = torch.argmax(class_probs, dim=-1)
-                label_agreement = torch.where(
-                    targets.cuda() == predicted_labels, 1, 0)
-                # Compute accuracy
-                correct_sum += label_agreement.sum()
-            elif self.mode == 'vLLM':
-                # vLLM configurations
-                outputs = self._generator.generate(formatted_templates, sampling_params)
-                # vLLM Post-processing
-                for index, output in enumerate(outputs):
-                    full_label_probs = []
-                    if output.outputs[0].logprobs == []:
-                        print("index:", output.outputs)
-                        continue
-                    output_logprobs = output.outputs[0].logprobs[0]
-                    target_nll = -output_logprobs[self.verbalizer_ids[targets[index].item()]].logprob
-                    full_label_probs.append(np.exp(-output_logprobs[self.verbalizer_ids[targets[index]]].logprob))
-                    
-                    incorrect_ids = [verbalizer for verbalizer in self.verbalizer_ids if verbalizer != self.verbalizer_ids[targets[index].item()]]
-                    other_nlls = []
-                    for incorrect_id in incorrect_ids:
-                        other_nlls.append(-output_logprobs[incorrect_id].logprob)
-                        full_label_probs.append(np.exp(-output_logprobs[incorrect_id].logprob))
-                    other_nll = min(other_nlls)
-                    full_label_probs = [label/sum(full_label_probs) for label in full_label_probs]
-                    full_label_probs_2index = [self.verbalizer_ids[targets[index].item()]] + incorrect_ids
-
-                    nlls.append(target_nll)
-                    incorrect_nlls.append(other_nll)
-                    
-                    predict_label = full_label_probs_2index[np.argmin(full_label_probs)]
-                    if self.verbalizer_ids[targets[index].item()] == predict_label:
-                        correct_sum += 1
-                # Rewards - RLPrompt
-                for i, nll in enumerate(nlls):
-                    marginprob_i = np.exp(-nll) - np.exp(-incorrect_nlls[i])
-                    if marginprob_i > 0:
-                        marginprob_i *= 200
-                    else:
-                        marginprob_i *= 180
-                    
-                    gap_sums.append(marginprob_i)
-                    
-        accuracy = correct_sum/num_of_examples
-        return accuracy, torch.mean(torch.tensor(gap_sums))
+            # vLLM configurations
+            outputs = self._generator.generate(formatted_templates, sampling_params)
+            # vLLM Post-processing
+            all_inputs.extend(inputs)
+            all_outputs.extend(outputs)
+            
+        test_generations, test_accuracy = process_outputs(all_outputs, all_inputs)
+        return test_accuracy, -1

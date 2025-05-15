@@ -58,9 +58,9 @@ def main(args):
         pass
     # 3. Perform Pruning
     """
-    Structure of prompt_queues: [(prompt, accuracy on valid set, reward on valid set, prompt_length, mask)] 
+    Structure of prompt_queues: [(prompt, accuracy on valid set, reward (-1) on valid set, prompt_length, mask)] 
     """
-    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=args.reward_driven,
+    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=False,
                 fix_prune_order=args.fix_prune_order)
     # 4. Save the collection of prompts
     prompt_queues = [(p, acc.item(), r.item(), l, m) for p, acc, r, l, m in prompt_queues]
@@ -73,32 +73,30 @@ def main(args):
         
     if args.fix_prune_order:
         if args.pruner == "TAPruning":
-            args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
-            f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_samples}-samples_{args.TAPruning_threshold}"
+            f"_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-shots"
-            f"_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples"
+            f"_{args.ICL_shots}-shot_{args.ICL_index}.csv")
     else:
         if args.pruner == "TAPruning":
-            args.num_shots = 200
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples_{args.TAPruning_threshold}"
-            f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_samples}-samples_{args.TAPruning_threshold}"
+            f"_prune-order-{args.prune_order_seed}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
         elif args.pruner == "PromptQuine":
             prompt_collection_df.to_csv(
-            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-shots"
-            f"_prune-order-{args.prune_order_seed}_{args.reward_driven}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
+            f"./PrunedPrompts_by_{args.pruner}/{model_name}_{args.dataset}_{args.num_shots}-samples"
+            f"_prune-order-{args.prune_order_seed}_{args.ICL_shots}-shot_{args.ICL_index}.csv")
 
             
 if __name__ == "__main__":
     starttime = datetime.datetime.now()
     
     parser = argparse.ArgumentParser(description='Prompt pruning for reasoning.')
-    parser.add_argument('--data_mode', type=str, default= "reduce", help='dataset mode for TAPruning')
-    parser.add_argument('--model', type=str, default= "openai-community/gpt2", help='Full huggingface model name')
+    parser.add_argument('--data_mode', type=str, default= "dev", help='dataset mode for TAPruning')
+    parser.add_argument('--model', type=str, default= "meta-llama/Meta-Llama-3-8B-Instruct", help='Full huggingface model name')
     parser.add_argument('--num_samples', type=int, default=200, help='Dataset shots for pruning')
     parser.add_argument('--proxy_samples', type=int, default=100, help='Dataset proxy shots for pruning (early stopping)')
     #parser.add_argument('--dataset_split', type=bool, default=True, help='Dataset split indicator (half)')

@@ -27,16 +27,13 @@ class TAPruner(Pruner):
     """The TAPruner class for TAPruning implementations."""
     
     def __init__(self, 
-                 prompt_evaluator: Optional[PromptedClassificationEvaluator], 
+                 prompt_evaluator: Optional[PromptedClassificationEvaluator, 
+                             PromptedReasoningEvaluator], 
                              #PromptedStyleTransferEvaluator, PromptedMathReasoningEvaluator],
-                 task_lm: str,
-                 evaluator_task: str,
-                 prompt: Optional[str] = None,
-                 mode: str = "vLLM",
-                 threshold: int = 1,
+                 task_lm: str, evaluator_task: str, prompt: Optional[str] = None,
+                 mode: str = "vLLM", threshold: int = 1,
                  # used for ClassificationEvaluator
-                 dataset: str = "",
-                 is_mask_lm: str = False) -> None:
+                 dataset: str = "", is_mask_lm: str = False) -> None:
         assert evaluator_task in ["classification", "style_transfer", "math_reasoning"]
         if evaluator_task == "classification":
             self.tester = prompt_evaluator(
@@ -67,11 +64,11 @@ class TAPruner(Pruner):
         prompt_ids = tokenizer.convert_tokens_to_ids(prompt_tokens)
         prompt_len = len(prompt_tokens) 
         # Record initial prompt's performance
-        inti_acc, inti_reward = self.tester.forward(test_loader, prompt)
-        max_performance = inti_acc if not reward_driven else inti_reward
+        initial_acc, initial_reward = self.tester.forward(test_loader, prompt)
+        max_performance = initial_acc if not reward_driven else initial_reward
         # initialize pruned-prompt-queues
         mask = [True for _ in range(len(prompt_ids))]
-        prompt_queues = [(prompt, inti_acc, inti_reward, prompt_len, mask)] 
+        prompt_queues = [(prompt, initial_acc, initial_reward, prompt_len, mask)] 
         
         # Tracked Variable Setups
         outer_prompt_length = len(prompt_ids)
