@@ -9,7 +9,7 @@ ICML 2025
 
 ![Open-Ended Prompt Evolution for LLM Self-improvement](PromptQuine-repo.png)
 
-* Conventional wisdom of LLM prompting suggests that well-cafted natural language instructions, combined with a few well-tuned demonstrations work best (e.g., see [this](https://proceedings.neurips.cc/paper_files/paper/2024/file/6b031defd145b02bed031093d8797bb3-Paper-Conference.pdf)) for current LLM prompting (often, undergoing significant alignment efforts).
+* Conventional wisdom of LLM prompting suggests that well-cafted natural language instructions, combined with a few well-tuned demonstrations work best (e.g., see [this](https://proceedings.neurips.cc/paper_files/paper/2024/file/6b031defd145b02bed031093d8797bb3-Paper-Conference.pdf)) for current LLM prompting (often, have undergone significant alignment efforts).
 * In our paper, we present a *counterintuitive result*: pruning random demonstrations into seemingly incoherent ''gibberish'' (both syntactically and semantically strange) can surprisingly improve task performance.
 * Surprisingly, it often achieves near state-of-the-art prompt optimization results.
 * This suggests that pruning original ICL prompts could be an elegant alternative towards prompt optimization or any other ICL stablization algorithms (e.g., via retrieving semantically similar examples).
