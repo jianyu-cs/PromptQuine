@@ -37,7 +37,7 @@ class TAPruner(Pruner):
                  # used for StyleTransferEvaluator
                  style_classifier_path: str = None, style_batch_size: int = -1, 
                  style_classifier_device_id: int = None, num_samples: int = 1, task_top_k: int = 1):
-        assert evaluator_task in ["classification", "style_transfer", "math_reasoning"]
+        assert evaluator_task in ["classification", "style_transfer", "reasoning"]
         if evaluator_task == "classification":
             self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode, num_devices)
         elif evaluator_task == "reasoning":
@@ -46,6 +46,8 @@ class TAPruner(Pruner):
             assert style_batch_size != -1 and style_classifier_device_id != None and style_classifier_path != None
             self.tester = prompt_evaluator(task_lm, dataset, prompt, mode, num_devices, 
                             style_batch_size, style_classifier_path, style_classifier_device_id, num_samples, task_top_k)
+        
+        self._task = evaluator_task
         
         self.task_lm = task_lm
         self.threshold = threshold # 1 => greedy
@@ -65,12 +67,21 @@ class TAPruner(Pruner):
         prompt_tokens = tokenizer.tokenize(prompt)
         prompt_ids = tokenizer.convert_tokens_to_ids(prompt_tokens)
         prompt_len = len(prompt_tokens) 
-        # Record initial prompt's performance
-        initial_acc, initial_reward = self.tester.forward(test_loader, prompt)
-        max_performance = initial_acc if not reward_driven else initial_reward
-        # initialize pruned-prompt-queues
         mask = [True for _ in range(len(prompt_ids))]
-        prompt_queues = [(prompt, initial_acc, initial_reward, prompt_len, mask)] 
+        # Record initial prompt's performance
+        if self._task != "style_transfer"
+            initial_acc, initial_reward = self.tester.forward(test_loader, prompt)
+            max_performance = initial_acc if not reward_driven else initial_reward
+            # initialize pruned-prompt-queues
+            prompt_queues = [(prompt, initial_acc, initial_reward, prompt_len, mask)]
+            print(f"Initial Accuracy: {initial_acc}, Initial Reward: {initial_reward}")
+        else:
+            initial_joint_score, initial_gm, initial_content, initial_style, initial_fluency = \
+                                    self.tester.forward(test_loader, prompt)
+            max_performance = initial_joint_score
+            # initialize pruned-prompt-queues
+            prompt_queues = [(prompt, initial_joint_score, initial_gm, initial_content, initial_style, 
+                              initial_fluency, prompt_len, mask)] 
         
         # Tracked Variable Setups
         outer_prompt_length = len(prompt_ids)
@@ -97,8 +108,14 @@ class TAPruner(Pruner):
                 mask[IND2POS[counter]] = False
                 temp_prompt = tokenizer.decode(list(compress(prompt_ids, mask)))
                 colorful_print(f"Prompt: {temp_prompt}", fg='red')
-                acc, reward = self.tester.forward(test_loader, temp_prompt)
-                performance = acc if not reward_driven else reward
+                if self._task != "style_transfer"
+                    acc, reward = self.tester.forward(test_loader, temp_prompt)
+                    performance = acc if not reward_driven else reward
+                    print(f"Accuracy: {acc}, Reward: {reward}")
+                else:
+                    joint_score, gm, content, style, fluency = self.tester.forward(test_loader, prompt)
+                    performance = joint_score 
+                    
                 num_iterations += 1
 
                 if performance/max_performance < self.threshold:
@@ -109,7 +126,11 @@ class TAPruner(Pruner):
                     max_performance = performance if performance > max_performance else max_performance
                     inner_optimal_prompt = temp_prompt  
                     colorful_print(f"Updated Prompt: {inner_optimal_prompt}", fg='green') 
-                    prompt_queues.append((temp_prompt, acc, reward, len(tokenizer.tokenize(temp_prompt)), copy.deepcopy(mask)))
+                    if self._task != "style_transfer":
+                        prompt_queues.append((temp_prompt, acc, reward, len(tokenizer.tokenize(temp_prompt)), copy.deepcopy(mask)))
+                    else:
+                        prompt_queues.append((temp_prompt, joint, gm, content, style, fluency, 
+                                              len(tokenizer.tokenize(temp_prompt)), copy.deepcopy(mask)))
                     
                 counter += 1
             colorful_print("Next Iteration!", fg='green')

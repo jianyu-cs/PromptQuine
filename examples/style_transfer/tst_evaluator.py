@@ -73,32 +73,24 @@ class PromptedStyleTransferEvaluator:
             self.template = prompt
             self._generator.template = prompt
             
+        source_texts = data_lists[0]
+        target_labels = data_lists[1]
+        ref_texts = data_lists[2] # placeholder
+            
         # vLLM configurations
         sampling_params = SamplingParams(temperature=1, top_k=-1, max_tokens=1, allowed_token_ids=self.verbalizer_ids, logprobs=len(self.verbalizer_ids))
-        all_outputs = []
-        all_inputs = []
-        for i, batch in enumerate(dataloader):
-            # Dataset Parsing
-            inputs = batch['source_texts']  # List
-            if type(inputs[0]) != list:
-                inputs = [inputs]
-            targets = batch['target_labels']  # Tensor
-            batch_size = targets.size(0)
-            # Prompt Setups
-            source_texts = [s_1 for s_1 in inputs[0]]
-            current_prompts = [prompt for _ in range(batch_size)]
-            # vLLM configurations
-            generated_texts = self._generator.sample_generate_batch(
-                    prompt, source_texts, self.num_samples, self.task_top_k, 1.0)
-            output_texts, rewards, contents, styles = self._selector.select_outputs_batch(
-                    source_texts, generated_texts, targets)
-            (content, style, fluency, joint_score, gm, bleu, bertscore, ppl, _) = \
-                        self._selector.evaluate_output(source_texts, output_texts,
-                                  targets, ref_texts)
-            # TODO
-            # vLLM Post-processing
-            all_inputs.extend(inputs)
-            all_outputs.extend(outputs)
-            
-        test_generations, test_accuracy = process_outputs(all_outputs, all_inputs)
-        return test_accuracy, -1
+        generated_texts = self._generator.sample_generate_batch(
+                prompt, source_texts, self.num_samples, self.task_top_k, 1.0)
+        output_texts, rewards, contents, styles = self._selector.select_outputs_batch(
+                source_texts, generated_texts, target_labels)
+        (content, style, fluency, joint_score, gm, bleu, bertscore, ppl, _) = \
+                    self._selector.evaluate_output(source_texts, output_texts,
+                              target_labels, ref_texts)
+        print('Printing Aggregate Scores')
+        print('Content:', content, 'Style:', style, 'Fluency:', fluency,
+              'Joint:', joint_score, 'GM:', gm, 'BLEU:', bleu,
+              'BERTScore:', bertscore, 'PPL:', ppl, 
+              'Reward:', mean(rewards), 'Content_score:', mean(contents),
+              'Style_score:', mean(styles)
+            )
+        return joint_score, gm, content, style, fluency
