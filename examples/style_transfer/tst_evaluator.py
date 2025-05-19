@@ -16,6 +16,9 @@ class PromptedStyleTransferEvaluator:
         style_batch_size: int,
         style_classifier_path: str,
         style_classifier_device_id: int,
+        # generation hyper-parameters
+        num_samples: int,
+        task_top_k: int,
     ):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available()
@@ -38,6 +41,10 @@ class PromptedStyleTransferEvaluator:
             self.template = self.load_default_template()  # prompt templates
         else:
             self.template = prompt
+        
+        # generation decoding hyper-parameters
+        self.num_samples = num_samples
+        self.task_top_k = task_top_k
 
     def load_default_template(self) -> List[str]:
         template = "{sentence_1} {prompt}"
@@ -55,15 +62,16 @@ class PromptedStyleTransferEvaluator:
     @torch.no_grad()
     def forward(
         self,
-        dataloader: Any,
+        data_lists: Any,
         prompt: Optional[str]
     ) -> float:
         """Only support vLLM here."""
-        num_of_examples = dataloader.dataset.__len__()
+        num_of_examples = len(data_lists[0])
         correct_sum = 0
         
         if prompt:
             self.template = prompt
+            self._generator.template = prompt
             
         # vLLM configurations
         sampling_params = SamplingParams(temperature=1, top_k=-1, max_tokens=1, allowed_token_ids=self.verbalizer_ids, logprobs=len(self.verbalizer_ids))
@@ -77,10 +85,17 @@ class PromptedStyleTransferEvaluator:
             targets = batch['target_labels']  # Tensor
             batch_size = targets.size(0)
             # Prompt Setups
+            source_texts = [s_1 for s_1 in inputs[0]]
             current_prompts = [prompt for _ in range(batch_size)]
-            formatted_templates = self._format_prompts(current_prompts, *inputs)
             # vLLM configurations
-            outputs = self._generator.generate(formatted_templates, sampling_params)
+            generated_texts = self._generator.sample_generate_batch(
+                    prompt, source_texts, self.num_samples, self.task_top_k, 1.0)
+            output_texts, rewards, contents, styles = self._selector.select_outputs_batch(
+                    source_texts, generated_texts, targets)
+            (content, style, fluency, joint_score, gm, bleu, bertscore, ppl, _) = \
+                        self._selector.evaluate_output(source_texts, output_texts,
+                                  targets, ref_texts)
+            # TODO
             # vLLM Post-processing
             all_inputs.extend(inputs)
             all_outputs.extend(outputs)

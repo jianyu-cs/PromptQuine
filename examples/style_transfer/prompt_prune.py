@@ -23,6 +23,7 @@ def main(args):
         os.path.join('..', get_style_classifier(args.classifier_setup, args.dataset))
     # 2. load dataset
     base_path="./data"
+    ## returning both source_texts for dev and ref_texts for test
     source_texts, target_labels, ref_texts = \
             load_text_style_transfer_test_data(
             args.direction, args.dataset,
@@ -51,8 +52,9 @@ def main(args):
     """
     Structure of prompt_queues: [(prompt, accuracy on valid set, reward on valid set, prompt_length, mask)] 
     """
-    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=valid_loader, reward_driven=False,
+    prompt_queues, num_iterations = pruner.forward(prompt=prompt, test_loader=[source_texts, target_labels, ref_texts], reward_driven=False,
                 fix_prune_order=args.fix_prune_order)
+    # TODO
     
     # 4. Save the collection of prompts
     prompt_queues = [(p, acc.item(), r.item(), l, m) for p, acc, r, l, m in prompt_queues]
