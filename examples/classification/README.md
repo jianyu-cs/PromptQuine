@@ -16,4 +16,6 @@ python prompt_prune.py \
 ```
 
 * Note that you can adapt your own prompts, dataset and verbalizers by modifying our code.
-* 
+
+After obtaining the prompt pruning traces, please run the following command to obtain corresponding full validation (maybe with testing) results:
+* We provide options of both testing the entire prompts from the pool and testing only the selected prompt (maybe biased): 

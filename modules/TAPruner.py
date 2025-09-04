@@ -37,20 +37,30 @@ class TAPruner(Pruner):
                  # used for StyleTransferEvaluator
                  style_classifier_path: str = None, style_batch_size: int = -1, 
                  style_classifier_device_id: int = None, num_samples: int = 1, task_top_k: int = 1):
-        assert evaluator_task in ["classification", "style_transfer", "reasoning"]
+        assert evaluator_task in ["classification", "style_transfer", "reasoning"] # Delete soon
+        
+        evaluator_args = {
+            "task_lm": task_lm,
+            "dataset": dataset,
+            "prompt": prompt,
+            "num_devices": num_devices
+        }
+
         if evaluator_task == "classification":
-            self.tester = prompt_evaluator(task_lm, is_mask_lm, dataset, prompt, mode, num_devices)
+            evaluator_args["mode"] = mode
+            evaluator_args["is_mask_lm"] = is_mask_lm
         elif evaluator_task == "reasoning":
+            
             self.tester = prompt_evaluator(task_lm, dataset, prompt, num_devices)
         elif evaluator_task == "style_transfer":
             assert style_batch_size != -1 and style_classifier_device_id != None and style_classifier_path != None
             self.tester = prompt_evaluator(task_lm, dataset, prompt, mode, num_devices, 
                             style_batch_size, style_classifier_path, style_classifier_device_id, num_samples, task_top_k)
         
-        self._task = evaluator_task
-        
+        self.tester = prompt_evaluator(**evaluator_args)
+        self.task = evaluator_task
         self.task_lm = task_lm
-        self.threshold = threshold # 1 => greedy
+        self.threshold = threshold
     
     def forward(self, prompt: str, test_loader: Any, 
                 reward_driven: bool = False,
@@ -69,7 +79,7 @@ class TAPruner(Pruner):
         prompt_len = len(prompt_tokens) 
         mask = [True for _ in range(len(prompt_ids))]
         # Record initial prompt's performance
-        if self._task != "style_transfer"
+        if self.task != "style_transfer"
             initial_acc, initial_reward = self.tester.forward(test_loader, prompt)
             max_performance = initial_acc if not reward_driven else initial_reward
             # initialize pruned-prompt-queues
@@ -108,7 +118,7 @@ class TAPruner(Pruner):
                 mask[IND2POS[counter]] = False
                 temp_prompt = tokenizer.decode(list(compress(prompt_ids, mask)))
                 colorful_print(f"Prompt: {temp_prompt}", fg='red')
-                if self._task != "style_transfer"
+                if self.task != "style_transfer"
                     acc, reward = self.tester.forward(test_loader, temp_prompt)
                     performance = acc if not reward_driven else reward
                     print(f"Accuracy: {acc}, Reward: {reward}")
@@ -126,7 +136,7 @@ class TAPruner(Pruner):
                     max_performance = performance if performance > max_performance else max_performance
                     inner_optimal_prompt = temp_prompt  
                     colorful_print(f"Updated Prompt: {inner_optimal_prompt}", fg='green') 
-                    if self._task != "style_transfer":
+                    if self.task != "style_transfer":
                         prompt_queues.append((temp_prompt, acc, reward, len(tokenizer.tokenize(temp_prompt)), copy.deepcopy(mask)))
                     else:
                         prompt_queues.append((temp_prompt, joint, gm, content, style, fluency, 

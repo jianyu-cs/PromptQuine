@@ -31,7 +31,6 @@ def main(config):
     (val_dataset, num_classes, verbalizers, template) = \
         make_reduced_classification_dataset(config)
     
-    
     (scheduled_val_dataset, scheduled_num_classes, scheduled_verbalizers, scheduled_template) = \
         make_scheduled_reduced_classification_dataset(config)
     
@@ -134,8 +133,6 @@ def main(config):
         ans = {"prompt": prompts,
                "val_acc": [],
                "test_acc": []}
-    
-    
     
     
     if config.ILPS_flag:

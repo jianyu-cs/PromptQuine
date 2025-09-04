@@ -16,7 +16,6 @@ from modules.TAPruner import TAPruner
 from modules.PromptQuinePruner import PromptQuinePruner
 from dataset_helper import make_balanced_classification_dataset, make_classification_dataset
 
-
 def main(args):
     base_path = "./data"
     dataset_description = args.dataset
@@ -29,21 +28,30 @@ def main(args):
         # TODO
     elif args.pruner == "TAPruning":
         (valid_dataset, num_classes, verbalizers, template) = make_classification_dataset(
-            args.dataset, args.dataset_seed, base_path, args.model, args.data_mode)
+            args.dataset, args.dataset_seed, base_path, args.model, args.data_mode
+        )
     # TODO, for TAPruning for now.
-    valid_loader = DataLoader(valid_dataset,
-                             shuffle=False,
-                             batch_size=512,
-                             drop_last=False)
+    valid_loader = DataLoader(
+        valid_dataset,
+        shuffle=False,
+        batch_size=512,
+        num_workers=4,
+        drop_last=False
+    )
     
     # 1. Load ICL Prompts for Pruning
+    base_path = f"../../prompts/classification_prompts/{args.dataset}"
+
     if "random" in dataset_description:
         # Random Verbalizers (e.g., counter-intuitive)
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/randomlabelwords_few_shot_natural_prompts.jsonl"
+        prompts_path = f"{base_path}/randomlabelwords_few_shot_natural_prompts.jsonl"
     else:
-        prompts_path = f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot.jsonl" \
-            if args.is_mask_lm == False else \
-                f"../../prompts/classification_prompts/{args.dataset}/few_shot_natural_prompts_{args.ICL_shots}shot_masked.jsonl"
+        shot_suffix = f"{args.ICL_shots}shot"
+        if args.is_mask_lm:
+            prompts_path = f"{base_path}/few_shot_natural_prompts_{shot_suffix}_masked.jsonl"
+        else:
+            prompts_path = f"{base_path}/few_shot_natural_prompts_{shot_suffix}.jsonl"
+
     
     prompt_dict_list = [] 
     with open(prompts_path, 'r') as prompt_jsons:

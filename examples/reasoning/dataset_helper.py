@@ -1,3 +1,12 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+# File   : dataset_helper.py
+# Author : Jianyu Wang
+# Email  : jiw102@ucsd.edu
+# Date   : 07/10/2025
+#
+# Distributed under terms of the MIT license.
+
 import os
 import json
 import numpy as np 
@@ -27,28 +36,27 @@ def load_reasoning_dataset(
     split: str,
     base_path: str,
     max_size: Optional[int]
-) -> Tuple[List[str]]:
+) -> ReasoningDataset:
     assert dataset in ['gsm8k', 'mawps']
     assert split in ['train', 'dev', 'test']
 
-    filepath = f'{dataset}/{split}.json'
-    full_filepath = os.path.join(base_path, filepath)
-    with open(full_filepath) as f:
+    filepath = os.path.join(base_path, f'{dataset}/{split}.json')
+    with open(filepath) as f:
         instances = json.load(f)
 
     # Option to keep only certain number of examples
     if max_size is not None:
-        instances = sentences[:max_size]
+        instances = instances[:max_size]
     
-    source_texts = []
-    target_labels = []
-    if dataset == 'gsm8k':
-        for instance in instances:
-            source_texts.append(instance['instruction'])
-            target_labels.append(instance['answer'])
-    else:
-        for instance in instances:
-            source_texts.append(instance['original_text'])
-            target_labels.append(instance['ans'])
+    source_field, label_field = {
+        'gsm8k': ('instruction', 'answer'),
+        'mawps': ('original_text', 'ans')
+    }[dataset]
 
-    return source_texts, target_labels
+    source_texts = [inst[source_field] for inst in instances]
+    target_labels = [inst[label_field] for inst in instances]
+
+    return ReasoningDataset(source_texts, target_labels)
+
+def make_reasoning_dataset(
+    

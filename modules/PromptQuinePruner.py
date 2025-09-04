@@ -32,7 +32,13 @@ class PromptQuinePruner(Pruner):
                  evaluator_task: str,
                  prompt: Optional[str] = None,
                  mode: str = "vLLM",
-                 threshold: int = 1,
+                 # PromptQuine Arguments
+                 initialize_duplicate: bool = True,
+                 min_prompt_length: int = 15,
+                 max_prompts_in_replication: int = 10000,
+                 genetic_algorithm_mode: str = "GGA",
+                 population_size: int = 30,
+                 reproduction_size: int = 50,
                  # used for ClassificationEvaluator
                  dataset: str = "",
                  is_mask_lm: str = False) -> None:
@@ -45,12 +51,19 @@ class PromptQuinePruner(Pruner):
                 prompt,
                 mode)
         self.task_lm = task_lm
-        self.threshold = threshold # 1 => greedy
+        # PromptQuine arguments
+        self.population_size = population_size
+        self.min_prompt_length = min_prompt_length
+        self.reproduction_size = reproduction_size
+        self.genetic_algorithm_mode = genetic_algorithm_mode
+        self.initialize_duplicate = initialize_duplicate
+        self.max_prompts_in_replication = max_prompts_in_replication
+
     
     def forward(prompt: str, test_loader: Any, 
                 reward_driven: bool = False,
                 fix_prune_order: bool = True) -> List[Tuple]:
-        """Conduct TAPruning on the specified prompts"""
+        """Conduct PromptQuine on the specified prompts"""
         colorful_print(f"Prompt: {prompt}", fg='blue')
         # Start pruning
         num_iterations = 1 # counting ~ how many prompts we explored.
@@ -67,11 +80,12 @@ class PromptQuinePruner(Pruner):
         prompt_queues = [(prompt, inti_acc, inti_reward, prompt_len, mask)] 
         
         # Tracked Variable Setups
-        outer_prompt_length = len(prompt_ids)
-        inner_optimal_prompt = copy.copy(prompt)
+        prompt_populations = []
         tabu_list = create_tabulist(tokenizer, prompt_tokens)
         Prune_allowed_indices = [i for i in range(len(prompt_ids)) if i not in tabu_list]
 
+        # initialize prompt populations
+        
         random.seed()
         if not fix_prune_order:
             random.shuffle(Prune_allowed_indices)

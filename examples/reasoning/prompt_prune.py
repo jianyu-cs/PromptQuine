@@ -14,7 +14,7 @@ from fsc_evaluator import PromptedReasoningEvaluator
 sys.path.append("../../")
 from modules.TAPruner import TAPruner
 from modules.PromptQuinePruner import PromptQuinePruner
-from dataset_helper import load_reasoning_dataset
+from dataset_helper import make_reasoning_dataset
 
 
 def main(args):
