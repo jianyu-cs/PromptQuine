@@ -13,7 +13,7 @@ You can conduct TAPruning over (ICL) prompts on `Advbench` (w/ `greedy decoding`
 
 ```
 python prompt_prune.py \
-  model.name="meta-llama/Meta-Llama-3-8B-Instruct" \
+  model.name="lmsys/vicuna-7b-v1.5" \
   pruning.algorithm="TAPruning" \
   pruning.fix_prune_order=True \
   pruning.TAPruning_threshold=0.96 \
@@ -36,7 +36,7 @@ After obtaining the prompt pruning traces, please run the following commands (`p
 
 ```
 python prompt_eval.py \
-  model.name="meta-llama/Meta-Llama-3-8B-Instruct" \
+  model.name="lmsys/vicuna-7b-v1.5" \
   pruning.algorithm="TAPruning" \
   pruning.fix_prune_order=True \
   pruning.TAPruning_threshold=0.96 \
@@ -67,7 +67,7 @@ You can conduct PromptQuine over (ICL) prompts on a given dataset (w/ `greedy de
 
 ```
 python prompt_prune.py \
-  model.name="meta-llama/Meta-Llama-3-8B-Instruct" \
+  model.name="lmsys/vicuna-7b-v1.5" \
   pruning.algorithm="PromptQuine" \
   prompt_quine.algorithm_mode=SSGA \
   prompt_quine.initialize_duplicate=True \
@@ -90,7 +90,7 @@ After obtaining the prompt pruning traces, please run the following commands (`p
 
 ```
 python prompt_eval.py \
-  model.name="meta-llama/Meta-Llama-3-8B-Instruct" \
+  model.name="lmsys/vicuna-7b-v1.5" \
   pruning.algorithm="PromptQuine" \
   prompt_quine.algorithm_mode=SSGA \
   prompt_quine.initialize_duplicate=True \

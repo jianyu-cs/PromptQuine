@@ -114,7 +114,7 @@ class JailbreakingPromptCandidate(dict):
             length=length,
             EM_score=EM_score,
             Guard_score=Guard_score,
-            SV_score=SV_score
+            SV_score=SV_score,
             **kwargs,
         )
     
@@ -133,13 +133,13 @@ class JailbreakingPromptCandidate(dict):
             Guard_score = eval_result.get('Guard_score', 0.0)
             SV_score = eval_result.get('SV_score', 0.0)
             extra = {k: v for k, v in eval_result.items()
-                    if k not in ['reward']}
+                    if k not in ['reward', 'EM_score', 'Guard_score', 'SV_score']}
         else:
             raise ValueError(f"Unsupported eval_result: {type(eval_result)}")
         
         # Calculate prompt length
         length = len(tokenizer.tokenize(prompt)) if tokenizer else len(prompt.split())
-        
+
         return cls(
             prompt=prompt,
             mask=mask,
@@ -147,7 +147,7 @@ class JailbreakingPromptCandidate(dict):
             length=length,
             EM_score=EM_score,
             Guard_score=Guard_score,
-            SV_score=SV_score 
+            SV_score=SV_score,
             **extra
         )
     

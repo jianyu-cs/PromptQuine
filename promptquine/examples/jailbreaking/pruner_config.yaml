@@ -5,7 +5,7 @@ data:
   dataset: Advbench
 
 model:
-  name: "meta-llama/Meta-Llama-3-8B-Instruct"
+  name: "lmsys/vicuna-7b-v1.5"
   ICL_shots: 1
   ICL_index: 0
   priming: true

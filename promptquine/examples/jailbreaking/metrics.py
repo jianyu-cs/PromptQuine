@@ -150,7 +150,7 @@ class jailbreakingMetricEvaluator:
         """Return both EM and Guard scores."""
         EM_score = self.exact_match(outputs)
         Guard_score = self.guard_score(inputs, outputs)
-        print(EM_score, Guard_score)
+        print(f"[Eval] EM_score={EM_score:.4f}, Guard_score={Guard_score:.4f}")
         return {
             "EM_score": EM_score,
             "Guard_score": Guard_score
