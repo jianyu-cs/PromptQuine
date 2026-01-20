@@ -1,4 +1,4 @@
-"""Classification task strategy implementation."""
+"""Reasoning task strategy implementation."""
 
 from .base import TaskStrategy
 from promptquine.utils.reasoning import (

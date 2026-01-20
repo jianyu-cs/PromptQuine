@@ -1,4 +1,4 @@
-"""Classification task strategy implementation."""
+"""Jailbreaking task strategy implementation."""
 
 from .base import TaskStrategy
 from promptquine.utils.jailbreaking import (
