@@ -1,5 +1,0 @@
-- pruning.algorithm=PromptQuine
-- pruning.reward_driven=True
-- prompt_quine.reproduction_size=50
-- prompt_quine.algorithm_mode=GGA
-- data.dataset=sst-2

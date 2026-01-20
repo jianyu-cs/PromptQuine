@@ -67,11 +67,8 @@ def main(cfg: Config):
             prompts_path = get_prompts_path(cfg.data.dataset, is_mask_lm, cfg.model.ICL_shots, cfg.data.is_random_verbalizers)
             prompts_dict_list = load_prompts(prompts_path)
 
-            if cfg.model.ICL_index != None:
-                prompts = [prompts_dict_list[cfg.model.ICL_index]['prompt']]
-            else:
-                prompts = [prompts_dict['prompt'] for prompts_dict in prompts_dict_list]
-
+            prompts = [prompts_dict_list[cfg.model.ICL_index]['prompt']]
+            
             output_content = {
                 "prompt": prompts,
             }

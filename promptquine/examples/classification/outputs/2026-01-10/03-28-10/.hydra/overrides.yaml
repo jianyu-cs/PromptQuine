@@ -1,8 +1,0 @@
-- model.name=meta-llama/Meta-Llama-3-8B-Instruct
-- model.inference_engine=vLLM
-- data.dataset=snli
-- model.ICL_shots=1
-- pruning.algorithm=TAPruning
-- pruning.reward_driven=False
-- model.ICL_index=3
-- data.split=False

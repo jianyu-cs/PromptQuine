@@ -1,7 +1,0 @@
-- model.name=meta-llama/Meta-Llama-3-8B-Instruct
-- model.inference_engine=vLLM
-- data.dataset=yelp
-- model.ICL_shots=1
-- pruning.algorithm=TAPruning
-- pruning.reward_driven=True
-- model.ICL_index=3

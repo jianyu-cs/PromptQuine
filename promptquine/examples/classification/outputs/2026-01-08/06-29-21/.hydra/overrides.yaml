@@ -1,7 +1,0 @@
-- model.name=meta-llama/Meta-Llama-3-8B-Instruct
-- model.inference_engine=vLLM
-- data.dataset=subj
-- model.ICL_shots=1
-- prompt_quine.algorithm_mode=SSGA
-- pruning.algorithm=PromptQuine
-- pruning.reward_driven=True

@@ -18,10 +18,10 @@ ICML 2025
 * Empirical success over multiple tasks and models has demonstrated the effectiveness of our framework.
 
 ## Author Message
-We release **PromptQuine** as well as **TAPruning and SAHCPruning** for follow-up studies. We hope our work can serve as useful tools for further mechanistic studies of in-context learning and overall LLM prompt sensitivity.
+We release **PromptQuine** as well as **TAPruning** for follow-up studies. We hope our work can serve as useful tools for further mechanistic studies of in-context learning and overall LLM prompt sensitivity.
 
 ## Setting Up
-Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of <logits-processor> in their up-to-date release. Thus, please install vllm~0.9x in order to support our classification task settings. 
+Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of `logits-processor` in their up-to-date release. Thus, please install vllm~0.9x in order to support our classification task settings. 
 
 Install our core modules with
 ```
@@ -34,7 +34,8 @@ Please refer to the `promptquine/examples` directory, which contains our **imple
 2) text style transfer,
 3) reasoning,
 4) jailbreaking.
-as described in our paper.
+
+as **described in our paper**.
 
 The `PromptQuine` package provides the core components for prompt optimization.  
 The task-specific code in `examples` implements the corresponding task modules and leverages these core modules to run experiments.
