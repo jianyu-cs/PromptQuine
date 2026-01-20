@@ -2,6 +2,7 @@
 
 This repo contains the code of the discrete prompt optimization framework described in the paper \
 **Evolving Prompts In-Context: An Open-ended, Self-replicating Perspective** \
+Jianyu Wang, Zhiqiang Hu, Lidong Bing
 ICML 2025
 
 ## Getting Started
@@ -21,7 +22,7 @@ ICML 2025
 We release **PromptQuine** as well as **TAPruning** for follow-up studies. We hope our work can serve as useful tools for further mechanistic studies of in-context learning and overall LLM prompt sensitivity.
 
 ## Setting Up
-Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of `logits-processor` in their up-to-date release. Thus, please install vllm~0.9x in order to support our classification task settings. 
+Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of `logits-processor` in their up-to-date release. Thus, please install vllm~0x in order to support our classification task settings. 
 
 Install our core modules with
 ```
