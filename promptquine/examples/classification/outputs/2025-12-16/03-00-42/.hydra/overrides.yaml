@@ -1,0 +1,3 @@
+- pruning.algorithm=PromptQuine
+- pruning.reward_driven=True
+- prompt_quine.reproduction_size=80

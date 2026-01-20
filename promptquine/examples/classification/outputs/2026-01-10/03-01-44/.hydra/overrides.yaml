@@ -1,0 +1,9 @@
+- model.name=meta-llama/Meta-Llama-3-8B-Instruct
+- model.inference_engine=vLLM
+- data.dataset=piqa
+- model.ICL_shots=1
+- pruning.algorithm=PromptQuine
+- prompt_quine.algorithm_mode=GGA
+- pruning.reward_driven=True
+- model.ICL_index=3
+- data.split=False

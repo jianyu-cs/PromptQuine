@@ -1,6 +1,27 @@
-*.ipynb_checkpoints/
-*.swp
+# Python artifacts
+**/__pycache__/
+*.pyc
+
+# Jupyter
 *.ipynb
+.ipynb_checkpoints/
+
+# Swap files
+*.swp
+
+# TAPruning outputs
 *_by_TAPruning/
-*__pycache__/
-*style_classifiers/
+
+# Style classifiers
+**/style_classifiers/
+
+# Pretrained models
+**/roberta/
+**/roberta_large/
+**/llama3/
+
+# Generated prompts
+**/ICLPrompts_Unpruned/
+**/PrunedPrompts_by_PromptQuine/
+**/PrunedPrompts_by_TAPruning/
+**/others/

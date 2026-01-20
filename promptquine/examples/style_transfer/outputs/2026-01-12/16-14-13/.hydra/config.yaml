@@ -1,0 +1,44 @@
+data:
+  dataset: yelp
+  dataset_seed: null
+  direction: 0_to_1
+  base_path: ./data
+  max_size: 100
+  max_length: null
+  max_length_tokenizer: null
+prompt:
+  prompt: ''
+  is_pruned_prompt: false
+model:
+  name: meta-llama/Meta-Llama-3-8B-Instruct
+  end_punct: '"'
+  task_top_k: 1
+  num_samples: 1
+  pad_token: <|endoftext|>
+  compute_zscore: true
+  lower_outputs: false
+  control_output_length: false
+  style_classifier: test
+  style_tokenizer: null
+  style_batch_size: 256
+  style_classifier_device_id: 1
+  ICL_shots: 1
+  ICL_index: 0
+  num_devices: 1
+  inference_engine: vLLM
+pruning:
+  algorithm: PromptQuine
+  fix_prune_order: true
+  pruning_order_seed: 0
+  TAPruning_threshold: 0.96
+  reward_driven: false
+prompt_quine:
+  initialize_duplicate: true
+  min_prompt_length: 15
+  max_num_prompts: 10000
+  algorithm_mode: SSGA
+  population_size: 30
+  reproduction_size: 50
+  top_percent_rerank: 10
+  test_all_elites_for_debug: false
+  successive_halving: true

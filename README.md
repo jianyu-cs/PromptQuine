@@ -21,9 +21,24 @@ ICML 2025
 We release **PromptQuine** as well as **TAPruning and SAHCPruning** for follow-up studies. We hope our work can serve as useful tools for further mechanistic studies of in-context learning and overall LLM prompt sensitivity.
 
 ## Setting Up
+Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of <logits-processor> in their up-to-date release. Thus, please install vllm~0.9x in order to support our classification task settings. 
+
+Install our core modules with
+> pip install -e .
 
 ## Usage
+Please refer to the `examples` directory, which contains our implementations for  
+1) few-shot classification (incl. multi-choice QA)
+2) text style transfer,
+3) reasoning,
+4) jailbreaking.
+as described in our paper.
+
+The `PromptQuine` package provides the core components for prompt optimization.  
+The task-specific code in `examples` implements the corresponding task modules and leverages these core modules to run experiments.
 
 ## Acknowledgment
-We adapt the [code implementation in RLPrompt](https://github.com/mingkaid/rl-prompt/tree/main) for its user-friendly implementation in classification and style transfer tasks.
+We adapt the [RLPrompt codebase](https://github.com/mingkaid/rl-prompt/tree/main)
+to provide a user-friendly implementation for classification
+and text style transfer tasks.
 

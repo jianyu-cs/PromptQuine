@@ -1,0 +1,3 @@
+- data.dataset=mawps
+- pruning.algorithm=PromptQuine
+- model.ICL_index=2

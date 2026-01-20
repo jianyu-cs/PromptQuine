@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+PromptQuine.egg-info/PKG-INFO
+PromptQuine.egg-info/SOURCES.txt
+PromptQuine.egg-info/dependency_links.txt
+PromptQuine.egg-info/requires.txt
+PromptQuine.egg-info/top_level.txt

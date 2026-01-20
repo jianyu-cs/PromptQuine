@@ -1,0 +1,5 @@
+- model.name=meta-llama/Meta-Llama-3-8B-Instruct
+- model.inference_engine=vLLM
+- data.dataset=subj
+- model.ICL_index=4
+- model.ICL_shots=2

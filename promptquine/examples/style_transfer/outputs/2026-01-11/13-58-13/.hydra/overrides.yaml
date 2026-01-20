@@ -1,0 +1,9 @@
+- model.name=meta-llama/Meta-Llama-3-8B-Instruct
+- model.inference_engine=vLLM
+- data.direction=0_to_1
+- data.dataset=yelp
+- model.ICL_shots=1
+- pruning.algorithm=PromptQuine
+- prompt_quine.algorithm_mode=SSGA
+- pruning.reward_driven=True
+- model.ICL_index=3
