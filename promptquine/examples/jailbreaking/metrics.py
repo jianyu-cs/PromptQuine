@@ -148,7 +148,10 @@ class jailbreakingMetricEvaluator:
     
     def evaluate(self, inputs: List[str], outputs: List[str]) -> Dict[str, float]:
         """Return both EM and Guard scores."""
+        EM_score = self.exact_match(outputs)
+        Guard_score = self.guard_score(inputs, outputs)
+        print(EM_score, Guard_score)
         return {
-            "EM_score": self.exact_match(outputs),
-            "Guard_score": self.guard_score(inputs, outputs)
+            "EM_score": EM_score,
+            "Guard_score": Guard_score
         }

@@ -6,8 +6,6 @@ from typing import Optional, List
 
 import torch
 from tqdm import tqdm
-import openai
-import tiktoken
 from transformers import AutoTokenizer, pipeline, AutoConfig, AutoModelForCausalLM
 from torch.utils.data import Dataset, DataLoader
 from vllm import LLM, SamplingParams
