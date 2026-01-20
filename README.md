@@ -1,8 +1,9 @@
 # PromptQuine 🦎
 
 This repo contains the code of the discrete prompt optimization framework described in the paper \
-**Evolving Prompts In-Context: An Open-ended, Self-replicating Perspective** \
+**[Evolving Prompts In-Context: An Open-ended, Self-replicating Perspective](https://arxiv.org/abs/2506.17930)** \
 Jianyu Wang, Zhiqiang Hu, Lidong Bing
+
 ICML 2025
 
 ## Getting Started
