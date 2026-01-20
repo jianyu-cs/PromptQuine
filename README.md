@@ -24,10 +24,12 @@ We release **PromptQuine** as well as **TAPruning and SAHCPruning** for follow-u
 Note that although it's desirable to use vLLM v1 for the inference. By now, vLLM hasn't enabled the features of <logits-processor> in their up-to-date release. Thus, please install vllm~0.9x in order to support our classification task settings. 
 
 Install our core modules with
-> pip install -e .
+```
+pip install -e .
+```
 
 ## Usage
-Please refer to the `examples` directory, which contains our implementations for  
+Please refer to the `promptquine/examples` directory, which contains our **implementations** for  
 1) few-shot classification (incl. multi-choice QA)
 2) text style transfer,
 3) reasoning,

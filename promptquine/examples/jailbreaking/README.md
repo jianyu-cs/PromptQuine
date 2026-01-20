@@ -54,7 +54,7 @@ You will obtain the full evaluation results in the same `PrunedPrompts_by_TAPrun
 * Change `prompt.is_pruned_prompt` to evaluate unpruned original ICL prompts. 
 * Note that you shall **specify the detailed hyperparameters** you have set for training. This ensures that our script will load correct prompt csv file.
 
-## 2. PromptQuine for Reasoning Tasks
+## 2. PromptQuine for Jailbreaking Tasks
 If computational resources allow, in order to improve evolution's performance, please consider:
 1. Increase the `prompt_quine.reproduction_size`;
 2. Increase the `data.max_size`;
