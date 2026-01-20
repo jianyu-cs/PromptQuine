@@ -81,7 +81,7 @@ def create_pruner(cfg):
 @hydra.main(version_base=None, config_path=".", config_name="pruner_config")
 def main(cfg: Config):
     # initialize ray
-    ray.init()
+    ray.init(local_mode=True)
     # 1. load dataset
     base_path = "./data"
     source_instances = load_jailbreaking_dataset(

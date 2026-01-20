@@ -18,6 +18,7 @@
 # Pretrained models
 **/roberta/
 **/roberta_large/
+**/roberta-large/
 **/llama3/
 
 # Generated prompts
