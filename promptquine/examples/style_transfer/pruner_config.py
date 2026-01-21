@@ -57,7 +57,7 @@ class PromptQuineConfig:
     population_size: int = 30
     reproduction_size: int = 50
     # Evaluation-only: re-rank
-    top_percent_rerank: int = 10
+    top_absolute_rerank: int = 20
     test_all_elites_for_debug: bool = False
     # Resource Allocation
     successive_halving: bool = True

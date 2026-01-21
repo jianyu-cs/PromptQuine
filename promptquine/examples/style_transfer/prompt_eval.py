@@ -108,10 +108,12 @@ def main(cfg):
             if cfg.pruning.algorithm == "PromptQuine":
                 # Re-ranking for PromptQuine
                 prompts_df = pd.read_csv(prompts_path)
-                prompt_percent_threshold = np.percentile(prompts_df[metric], 100 - cfg.prompt_quine.top_percent_rerank)
-                top_df = prompts_df[prompts_df[metric] >= prompt_percent_threshold].copy()
-                top_df['rank'] = top_df[metric].rank(ascending=False, method='min')
-                top_df = top_df.sort_values(by='rank')
+                # prompt_percent_threshold = np.percentile(prompts_df[metric], 100 - cfg.prompt_quine.top_percent_rerank)
+                # top_df = prompts_df[prompts_df[metric] >= prompt_percent_threshold].copy()
+                top_df = prompts_df.sort_values(by=metric, ascending=False).head(cfg.prompt_quine.top_absolute_rerank).copy()
+                top_df['rank'] = range(1, len(top_df) + 1)
+                # top_df['rank'] = top_df[metric].rank(ascending=False, method='min')
+                # top_df = top_df.sort_values(by='rank')
                 prompts = top_df['prompt'].tolist()
                 output_content = {
                     "prompt": prompts,

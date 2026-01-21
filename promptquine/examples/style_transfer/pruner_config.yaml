@@ -38,7 +38,7 @@ prompt_quine: # Default
   population_size: 30
   reproduction_size: 50
   # Evaluation-only
-  top_percent_rerank: 10
+  top_absolute_rerank: 20
   test_all_elites_for_debug: false
   # Resource Allocation
   successive_halving: true
