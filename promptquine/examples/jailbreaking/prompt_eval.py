@@ -1,3 +1,7 @@
+"""
+We always pick the worst prompt for final text outputs, to alleviate reward hacking.
+This one is only for debugging.
+"""
 import argparse
 import dataclasses
 import json
@@ -16,6 +20,7 @@ import pandas as pd
 from vllm import LLM
 from omegaconf import DictConfig, OmegaConf
 from hydra.core.config_store import ConfigStore
+from ray.util.placement_group import placement_group
 
 from pruner_config import Config
 from dataset_helper import load_jailbreaking_dataset
@@ -52,7 +57,7 @@ def evaluate_prompts(
     for prompt in prompts:
         # Generate outputs
         evaluation_results, output_texts = prompted_generator.forward(
-            input_queries=input_texts,
+            input_queries=source_texts,
             prompt=prompt,
             Eval=True
         )
@@ -68,6 +73,7 @@ def main(cfg):
     ray.init()
     # 1. load dataset
     # dev (max_size) & test
+    base_path = "./data"
     source_instances = load_jailbreaking_dataset(
         cfg.data.dataset,
         "dev", # Full dev samples
@@ -110,7 +116,7 @@ def main(cfg):
         # Requirement: All prompts have been formatted already (e.g., conversational tags)
         else:
             prompts_path = get_output_path(cfg)
-            metric = "fitness" # unless otherwise stated
+            metric = "ASR-Fitness" # unless otherwise stated
             if cfg.pruning.algorithm == "PromptQuine":
                 # Re-ranking for PromptQuine
                 prompts_df = pd.read_csv(prompts_path)
@@ -125,12 +131,15 @@ def main(cfg):
             elif cfg.pruning.algorithm == "TAPruning":
                 # Pick the one with the highest validation score during pruning
                 prompts_df = pd.read_csv(prompts_path)
-                max_joint = prompts_df[metric].max()
-                last_max_row = prompts_df[prompts_df[metric] == max_joint].index[-1]
+                # Branching
+                # max_joint = prompts_df[metric].max()
+                # last_max_row = prompts_df[prompts_df[metric] == max_joint].index[-1]
+                sorted_indices = prompts_df[metric].sort_values(ascending=False).index
+                last_max_row = sorted_indices[cfg.pruning.selection_top_k]
 
                 prompts, val_fitness, val_num_tokens = [
                     [prompts_df.iloc[last_max_row][col]] 
-                    for col in ['prompt', 'fitness', '#tokens']
+                    for col in ['prompt', 'ASR-Fitness', '#tokens']
                 ]
                 output_content = {
                     "prompt": prompts,
@@ -138,12 +147,21 @@ def main(cfg):
                     "num_tokens": val_num_tokens
                 }
     # 3. Setup the evaluation
-    print('Test Size:', len(test_source_texts))
-    print('Examples:', test_source_texts[:5])
+    num_bundles = 3 if cfg.pruning.pruning_metric == "ASR-SV" else 2
+    pg = placement_group(
+        name="llm_pg",
+        bundles=[{"GPU": cfg.model.gpus_per_bundle, "CPU": cfg.model.cpus_per_bundle} for _ in range(num_bundles)],
+        strategy="STRICT_PACK"
+    )
     prompted_generator = PromptedJailbreakingEvaluator(
         task_lm = cfg.model.name,
         dataset = cfg.data.dataset,
         num_devices = cfg.model.num_devices,
+        prompt = None, # Optional
+        placement_group = pg,
+        guard_model_name = "meta-llama/Llama-Guard-3-8B",
+        priming = cfg.model.priming,
+        pruning_metric = cfg.pruning.pruning_metric
     )
     # 4. Start evaluation
     priming_conditioner = not cfg.prompt.is_pruned_prompt and cfg.model.priming
@@ -296,11 +314,12 @@ def main(cfg):
     })
     # Aggregate generated texts (prompts[0])
     generated_texts_content = {
-        "val_input": source_instances["prompt"],
+        #"val_input": source_instances["prompt"],
         "test_input": test_source_instances["prompt"],
-        "val_output": dev_output_texts[0],
-        "test_output": test_output_texts[0],
+        #"val_output": dev_output_texts[0],
+        "test_output": test_output_texts[-1],
     }
+    print("=== Debug Info ===")
     # === Prepare DataFrame ===
     saved_df = pd.DataFrame(output_content)
     saved_texts_df = pd.DataFrame(generated_texts_content)

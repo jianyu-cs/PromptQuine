@@ -1,4 +1,4 @@
-from .paths import get_prompts_path, get_output_path
+from .paths import get_prompts_path, get_output_path, ensure_dirs
 from .prompts import (
     format_chat_prompt,
     save_pruned_prompts,

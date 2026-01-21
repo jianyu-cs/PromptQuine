@@ -20,6 +20,7 @@ from itertools import compress
 from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
+from ray.util.placement_group import placement_group
 from promptquine.utils import colorful_print, create_tabu_list
 from promptquine.core import (
     TaskStrategy, 
@@ -109,7 +110,7 @@ class PromptQuinePruner(Pruner):
                 "guard_model_name": "meta-llama/Llama-Guard-3-8B",
                 "placement_group": placement_group(
                     name="llm_pg",
-                    bundles=[{"GPU": gpus_per_bundle, "CPU": cpu_per_bundle} for _ in range(num_bundles)],
+                    bundles=[{"GPU": gpus_per_bundle, "CPU": cpus_per_bundle} for _ in range(num_bundles)],
                     strategy="STRICT_PACK"
                 )
             })

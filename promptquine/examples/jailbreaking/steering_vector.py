@@ -25,13 +25,11 @@ class SteeringVectorModelLayerWrapper:
             pad_token="[PAD]",
             padding_side="left",
             use_fast=False,
-            local_files_only=True,
         )
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
             torch_dtype=dtype,
-            local_files_only=True,
         ).to(self.device)
 
         self.model.eval()
@@ -78,7 +76,7 @@ class SteeringVectorModelLayerWrapper:
         # LLM Contrastive Vectors
         src_contrast_vec = derive_final_vector_from_template(
             input_queries,
-            self.model,
+            self,
             layer_index
         )
         src_contrast_vec = src_contrast_vec.unsqueeze(0)
@@ -87,7 +85,7 @@ class SteeringVectorModelLayerWrapper:
         # LLM Contrastive Activations
         for query in input_queries:
             vec_a, vec_b = compute_steering_vectors(
-                self.model,
+                self,
                 [
                     prompt.format(sentence_1=query),
                     self.template.format(sentence_1=query)

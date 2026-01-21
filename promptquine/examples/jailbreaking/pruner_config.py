@@ -30,6 +30,7 @@ class PruningConfig:
     pruning_order_seed: int = 0
     TAPruning_threshold: float = 0.96
     pruning_metric: str = "ASR-EM" # "ASR-LLM", "ASR-SV"
+    selection_top_k: int = 1 # Only TAPruning
 
 @dataclass
 class PromptConfig: # Evaluation-Only

@@ -23,6 +23,8 @@ pruning:
   pruning_order_seed: 0
   TAPruning_threshold: 0.96 # Only TAPruning
   pruning_metric: "ASR-EM" # "ASR-LLM", "ASR-SV"
+  # Evaluation-only
+  selection_top_k: 1 # Only TAPruning
 
 prompt_quine: # Default
   initialize_duplicate: true

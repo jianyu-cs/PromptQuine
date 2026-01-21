@@ -128,7 +128,7 @@ class PromptedJailbreakingEvaluator:
         # Steering Vector (If specified)
         self._steering_evaluator = None
         if pruning_metric == "ASR-SV":
-            self._steering_evaluator = SteeringVectorModelLayerWrapper(
+            self._steering_evaluator = SteeringVectorModelLayerWrapper.options(
             scheduling_strategy = PlacementGroupSchedulingStrategy(
                 placement_group = placement_group,
                 placement_group_bundle_index=2
