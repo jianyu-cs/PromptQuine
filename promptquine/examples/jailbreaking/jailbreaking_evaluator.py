@@ -82,7 +82,7 @@ class JailbreakingPromptedModel:
         # Output texts
         output_texts = [output.outputs[0].text for output in outputs]
         grouped_outputs = [
-            output_texts[i : i + num_of_examples]
+            output_texts[i : i + num_samples_per_prompt]
             for i in range(0, len(outputs), num_samples_per_prompt)
         ]
         return grouped_outputs
@@ -213,6 +213,7 @@ class PromptedJailbreakingEvaluator:
         # Steering vector (In-case specified)
         if self.pruning_metric == "ASR-SV":
             sv_evaluation_futures = []
+            print(len(prompts))
             for prompt in prompts:
                 sv_evaluation_future = self._steering_evaluator.compute_steering_vector_fitness.remote(
                     input_queries, prompt, 

@@ -6,7 +6,7 @@ data:
 
 model:
   name: "lmsys/vicuna-7b-v1.5"
-  ICL_shots: 1
+  ICL_shots: 2
   ICL_index: 0
   priming: true
   # Ray parameters
