@@ -4,7 +4,7 @@ This module implements pruning script for ICL prompts (jailbreaking tasks).
 Specifically, it includes two modes:
 
 1. Few-shot priming: Just like traditional ICL, we do not explicitly add conversational tags among demonstrations;
-2. In-context attacks: We explicitly separate demonstrations into different conversation turns with conversational tags asserted;
+2. In-context attacks: We explicitly separate demonstrations into different conversation turns with conversational tags inserted;
 """
 import sys
 import os
