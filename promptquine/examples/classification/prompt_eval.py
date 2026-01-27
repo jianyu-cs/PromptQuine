@@ -166,13 +166,16 @@ def main(cfg: Config):
         )
     elif not cfg.prompt.is_pruned_prompt:
         # Save into Temporary Directory
-        base_saved_path = f"ICLPrompts_Unpruned/{cfg.data.dataset}"
+        base_saved_path = os.path.join(
+            f"ICLPrompts_Unpruned/{cfg.data.dataset}/",
+            cfg.model.name.replace('/', '-'),
+            f"{cfg.model.ICL_shots}-shots_ICL"
+        )
+
         os.makedirs(base_saved_path, exist_ok=True)
 
         prompt_saved_file_path = os.path.join(
             base_saved_path,
-            cfg.model.name.replace('/', '-'),
-            f"{cfg.model.ICL_shots}-shots_ICL",
             f"{cfg.model.ICL_index}-index-ICL.csv"
         )
     elif cfg.pruning.algorithm == "PromptQuine":
@@ -192,14 +195,14 @@ def main(cfg: Config):
             suffix,
         )
         os.makedirs(base_saved_path, exist_ok=True)
-        if data_cfg.split == True: # PromptQuine Only
-            data_cfg.num_shots = data_cfg.num_shots // 2
+        if cfg.data.split == True: # PromptQuine Only
+            cfg.data.num_shots = cfg.data.num_shots // 2
         if cfg.prompt_quine.initialize_duplicate:
             filename = (
                 f"{cfg.model.inference_engine}_{fitness_str}"
                 f"_initialize_with_duplicates"
                 f"_{cfg.data.num_shots}-shots-samples-in-train"
-                f"_{pq_cfg.population_size}-population-size"
+                f"_{cfg.prompt_quine.population_size}-population-size"
                 f"_{cfg.prompt_quine.reproduction_size}-reproduction-size"
                 f"_{cfg.data.dataset_seed}-data-seed"
                 f"_{cfg.model.ICL_index}-index-ICL.csv"
@@ -209,7 +212,7 @@ def main(cfg: Config):
                 f"{cfg.model.inference_engine}_{fitness_str}"
                 f"_initialize_with_random_pruning"
                 f"_{cfg.data.num_shots}-shots-samples-in-train"
-                f"_{pq_cfg.population_size}-population-size"
+                f"_{cfg.prompt_quine.population_size}-population-size"
                 f"_{cfg.prompt_quine.reproduction_size}-reproduction-size"
                 f"_{cfg.data.dataset_seed}-data-seed"
                 f"_{cfg.model.ICL_index}-index-ICL.csv"

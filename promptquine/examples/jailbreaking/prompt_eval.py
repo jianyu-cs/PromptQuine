@@ -225,6 +225,8 @@ def main(cfg):
             f"{cfg.model.ICL_shots}-shots_ICL",
             cfg.data.dataset,
             cfg.pruning.pruning_metric,
+            "Pruned_prompts",
+            "Eval",
             suffix,
         )
         dirs = ensure_dirs(base_saved_dir, ["prompted_generated_texts", "prompted_pruned_results"])
@@ -265,6 +267,8 @@ def main(cfg):
             f"{cfg.model.ICL_shots}-shots_ICL",
             cfg.data.dataset,
             cfg.pruning.pruning_metric,
+            "Pruned_prompts",
+            "Eval",
             local_dir_name
         )
         dirs = ensure_dirs(base_saved_dir, ["prompted_generated_texts", "prompted_pruned_results"])

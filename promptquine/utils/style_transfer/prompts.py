@@ -161,7 +161,7 @@ def save_pruned_prompts(prompt_queues: List[Tuple], output_path: str) -> None:
         for (prompt, joint, length, mask, gm, content,
             style, fluency) in prompt_queues
     ]
-    df = pd.DataFrame(prompt_queues, columns=['prompt', 'joint', 'gm', 
+    df = pd.DataFrame(processed_data, columns=['prompt', 'joint', 'gm', 
                                         'content', 'style', 'fluency', '#tokens', "mask"])
     df = df.drop(columns=["mask"])
     df.to_csv(output_path, index=False)

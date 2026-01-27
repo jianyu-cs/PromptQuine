@@ -11,8 +11,8 @@ from vllm import LLM, SamplingParams
 from ray.util.placement_group import PlacementGroup
 from ray.util.scheduling_strategies import PlacementGroupSchedulingStrategy
 
-from metrics import jailbreakingMetricEvaluator
-from steering_vector import SteeringVectorModelLayerWrapper
+from promptquine.examples.jailbreaking.metrics import jailbreakingMetricEvaluator
+from promptquine.examples.jailbreaking.steering_vector import SteeringVectorModelLayerWrapper
 
 @ray.remote(num_gpus=1, num_cpus=4)
 class JailbreakingPromptedModel:
