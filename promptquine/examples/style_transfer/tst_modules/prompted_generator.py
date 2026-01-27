@@ -1,5 +1,4 @@
 import os
-import pdb
 import time
 import json
 from typing import Optional, List
@@ -91,6 +90,7 @@ class PromptedGenerator:
         This is now a thin wrapper around _generate_core.
         """
         formatted_prompt = self.template.replace("{prompt}", prompt).replace("{sentence_1}", source_text)
+
         return self._generate_core([formatted_prompt], num_samples, top_k)
 
     def sample_generate_batch(
@@ -108,7 +108,7 @@ class PromptedGenerator:
             self.template.replace("{prompt}", prompt).replace("{sentence_1}", text)
             for text in source_texts
         ]
-        
+
         return self._generate_core(formatted_prompts, num_samples, top_k)
 
     def parallel_sample_generate_batch(
@@ -131,7 +131,7 @@ class PromptedGenerator:
             for p_template in input_prompts
             for s_text in source_texts
         ]
-
+       
         # 2. Call the core logic: Process all combinations at once
         flat_results = self._generate_core(flat_prompts, num_samples, top_k)
 
